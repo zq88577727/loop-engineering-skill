@@ -10,6 +10,7 @@ from pathlib import Path
 REQUIRED = [
     "README.md",
     "LICENSE",
+    "assets/loop-engineering-flow.png",
     "skills/loop-engineering/SKILL.md",
     "skills/loop-engineering/agents/openai.yaml",
     "skills/loop-engineering/references/full-workflow.md",
