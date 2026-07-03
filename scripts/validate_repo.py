@@ -13,6 +13,7 @@ REQUIRED_FILES = [
     "README.md",
     "LICENSE",
     ".github/workflows/validate.yml",
+    ".github/workflows/live-eval.yml",
     "docs/releases/v0.2.0.md",
     "docs/releases/v0.2.1.md",
     "assets/loop-engineering-flow.png",
@@ -35,6 +36,14 @@ REQUIRED_FILES = [
     "examples/forward-test-existing-project.md",
     "examples/forward-test-premature-implementation.md",
     "examples/invalid-loop.md",
+    "evals/README.md",
+    "evals/run_offline_eval.py",
+    "evals/run_live_eval.py",
+    "evals/validators/validate_loop_output.py",
+    "evals/scenarios/vague-idea.yaml",
+    "evals/scenarios/existing-project-continue.yaml",
+    "evals/scenarios/premature-implementation.yaml",
+    "evals/reports/offline-eval-report.md",
 ]
 
 SKILL_REQUIRED_PHRASES = [
@@ -58,6 +67,8 @@ README_REQUIRED_PHRASES = [
     "python3 scripts/validate_repo.py",
     "python3 -m unittest discover -s tests",
     "v0.2.1",
+    "python3 evals/run_offline_eval.py",
+    "OPENAI_API_KEY",
 ]
 
 CI_REQUIRED_PHRASES = [
@@ -65,6 +76,13 @@ CI_REQUIRED_PHRASES = [
     "python3 -m unittest discover -s tests",
     "python3 -m py_compile",
     "init_loop_project.py --target",
+    "python3 evals/run_offline_eval.py",
+]
+
+LIVE_EVAL_REQUIRED_PHRASES = [
+    "workflow_dispatch",
+    "OPENAI_API_KEY",
+    "python3 evals/run_live_eval.py",
 ]
 
 
@@ -149,6 +167,11 @@ def validate_root(root: Path) -> list[str]:
     if ci.is_file():
         ci_text = ci.read_text(encoding="utf-8")
         errors.extend([f"validate.yml missing phrase: {p}" for p in CI_REQUIRED_PHRASES if p not in ci_text])
+
+    live_ci = root / ".github/workflows/live-eval.yml"
+    if live_ci.is_file():
+        live_text = live_ci.read_text(encoding="utf-8")
+        errors.extend([f"live-eval.yml missing phrase: {p}" for p in LIVE_EVAL_REQUIRED_PHRASES if p not in live_text])
 
     errors.extend(_check_initializer(root))
     return errors

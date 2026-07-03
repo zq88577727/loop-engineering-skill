@@ -164,6 +164,7 @@ The repository includes CI-compatible validation, unit tests, and a smoke-testab
 python3 scripts/validate_repo.py
 python3 -m unittest discover -s tests
 python3 -m py_compile scripts/validate_repo.py skills/loop-engineering/scripts/init_loop_project.py
+python3 evals/run_offline_eval.py
 python3 skills/loop-engineering/scripts/init_loop_project.py --target /tmp/loop-engineering-smoke
 ```
 
@@ -181,6 +182,35 @@ For user-facing behavior examples, see:
 - `examples/forward-test-existing-project.md`
 - `examples/forward-test-premature-implementation.md`
 - `examples/invalid-loop.md`
+
+## Behavior Evals
+
+The repository includes an automated behavior eval harness for the skill.
+
+Run the deterministic offline eval without any token:
+
+```bash
+python3 evals/run_offline_eval.py
+```
+
+The offline eval covers three scenarios:
+
+- vague idea -> clarify and scaffold state
+- existing project -> continue one bounded loop from state
+- premature implementation pressure -> reject coding too early and persist a
+  next-loop plan
+
+The latest offline report is stored in `evals/reports/offline-eval-report.md`.
+
+Optional live model evals are available through the manual GitHub Actions
+workflow `.github/workflows/live-eval.yml`, or locally with:
+
+```bash
+OPENAI_API_KEY=... python3 evals/run_live_eval.py --require-token
+```
+
+Live evals are intentionally not part of default CI so public contributors can
+reproduce the default quality gate without an API key.
 
 ## Design Principles
 

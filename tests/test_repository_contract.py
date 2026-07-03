@@ -119,6 +119,13 @@ class PublicReadyAssetTests(unittest.TestCase):
         missing = [path for path in required if not (ROOT / path).is_file()]
 
         self.assertEqual(missing, [])
+        report_text = (ROOT / "evals/reports/offline-eval-report.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Verdict: PASS", report_text)
+        self.assertIn("vague-idea", report_text)
+        self.assertIn("existing-project-continue", report_text)
+        self.assertIn("premature-implementation", report_text)
 
     def test_ci_workflow_exists(self) -> None:
         workflow = ROOT / ".github/workflows/validate.yml"
@@ -175,6 +182,55 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertEqual(payload["tag"], "v0.2.1")
         self.assertEqual(payload["notes_file"], "docs/releases/v0.2.1.md")
         self.assertIn("gh release create v0.2.1", payload["command"])
+
+    def test_automated_behavior_eval_assets_exist(self) -> None:
+        required = [
+            "evals/README.md",
+            "evals/run_offline_eval.py",
+            "evals/run_live_eval.py",
+            "evals/validators/validate_loop_output.py",
+            "evals/scenarios/vague-idea.yaml",
+            "evals/scenarios/existing-project-continue.yaml",
+            "evals/scenarios/premature-implementation.yaml",
+            "evals/reports/offline-eval-report.md",
+            ".github/workflows/live-eval.yml",
+        ]
+
+        missing = [path for path in required if not (ROOT / path).is_file()]
+
+        self.assertEqual(missing, [])
+
+    def test_offline_eval_runs_without_token(self) -> None:
+        result = subprocess.run(
+            [PYTHON, "evals/run_offline_eval.py"],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            capture_output=True,
+            env={},
+        )
+
+        payload = json.loads(result.stdout)
+
+        self.assertEqual(payload["status"], "PASS")
+        self.assertEqual(payload["scenario_count"], 3)
+        self.assertEqual(
+            sorted(s["id"] for s in payload["scenarios"]),
+            ["existing-project-continue", "premature-implementation", "vague-idea"],
+        )
+
+    def test_ci_runs_offline_eval_and_live_eval_is_manual(self) -> None:
+        validate_workflow = (ROOT / ".github/workflows/validate.yml").read_text(
+            encoding="utf-8"
+        )
+        live_workflow = (ROOT / ".github/workflows/live-eval.yml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("python3 evals/run_offline_eval.py", validate_workflow)
+        self.assertIn("workflow_dispatch", live_workflow)
+        self.assertIn("OPENAI_API_KEY", live_workflow)
+        self.assertIn("python3 evals/run_live_eval.py", live_workflow)
 
 
 if __name__ == "__main__":

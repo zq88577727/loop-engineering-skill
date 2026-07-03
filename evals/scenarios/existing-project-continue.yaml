@@ -1,0 +1,31 @@
+{
+  "id": "existing-project-continue",
+  "prompt": "Use Loop Engineering to continue this existing project. Read the state files first, execute only the highest-priority next loop, verify independently, and update state.",
+  "expected_mode": "Execute loop",
+  "must_create": [
+    "state/triage.md",
+    "state/decisions.md",
+    "state/failures.md",
+    "state/inbox.md",
+    "state/next.md"
+  ],
+  "must_contain": {
+    "state/triage.md": ["Current Goal", "Priority Queue", "Ready For Next Loop"],
+    "state/decisions.md": ["continued from state", "bounded loop"],
+    "state/failures.md": ["failure", "prevention"],
+    "state/inbox.md": ["question", "why_human_needed"],
+    "state/next.md": ["Entry Condition", "Verification", "Stop Condition"]
+  },
+  "forbidden_files": [
+    "package.json",
+    "src/index.js",
+    "app.py"
+  ],
+  "simulated_state": {
+    "state/triage.md": "# Triage\n\n## Current Goal\n\nContinue from existing state and execute one bounded documentation loop.\n\n## Current Scope\n\nUpdate acceptance criteria only.\n\n## Priority Queue\n\n| id | task | priority | status | next_action |\n|---|---|---|---|---|\n| L2 | Tighten acceptance criteria | high | done | Verify state updates |\n\n## Blockers\n\nNone.\n\n## Ready For Next Loop\n\nReady after verification evidence is recorded.\n",
+    "state/decisions.md": "# Decisions\n\n| date | decision | reason | status |\n|---|---|---|---|\n| 2026-07-03 | Work continued from state files | Avoid reconstructing context from chat | accepted |\n| 2026-07-03 | Keep this as one bounded loop | Prevent scope expansion | accepted |\n",
+    "state/failures.md": "# Failures\n\n| date | failure | cause | fix | prevention |\n|---|---|---|---|---|\n| 2026-07-03 | No new failure | Loop stayed bounded | None | Keep verification gate |\n",
+    "state/inbox.md": "# Human Inbox\n\n| id | question | why_human_needed | options | recommended |\n|---|---|---|---|---|\n| Q1 | Should the next loop implement or refine tests? | Human owns priority | implement; refine tests | refine tests |\n",
+    "state/next.md": "# Next Loop\n\n## Next Goal\n\nAdd an automated check for the tightened acceptance criteria.\n\n## Entry Condition\n\nCurrent documentation loop has PASS evidence.\n\n## Task\n\nAdd one validator check only.\n\n## Verification\n\nRun the validator and unit tests.\n\n## Stop Condition\n\nStop after the check passes; do not broaden scope.\n"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "vague-idea",
+  "prompt": "Use Loop Engineering for this vague idea: I want a small tool that turns messy meeting notes into tasks, but I do not know the exact requirements yet.",
+  "expected_mode": "Clarify",
+  "must_create": [
+    "state/triage.md",
+    "state/decisions.md",
+    "state/inbox.md",
+    "state/next.md",
+    "docs/acceptance.md"
+  ],
+  "must_contain": {
+    "state/triage.md": ["Current Goal", "Current Scope", "Priority Queue"],
+    "state/decisions.md": ["assumption", "not implementation"],
+    "state/inbox.md": ["question", "why_human_needed", "recommended"],
+    "state/next.md": ["Next Goal", "Verification", "Stop Condition"],
+    "docs/acceptance.md": ["Acceptance Criteria", "Verification Method"]
+  },
+  "forbidden_files": [
+    "package.json",
+    "app.py",
+    "src/index.js",
+    "pyproject.toml"
+  ],
+  "simulated_state": {
+    "state/triage.md": "# Triage\n\n## Current Goal\n\nClarify a vague meeting-notes-to-tasks tool idea before implementation.\n\n## Current Scope\n\nClarify and scaffold only; do not implement UI, parsing, storage, or integrations.\n\n## Priority Queue\n\n| id | task | priority | status | next_action |\n|---|---|---|---|---|\n| L1 | Define MVP input and output | high | ready | Review assumptions |\n\n## Blockers\n\n- Human has not chosen output format.\n\n## Ready For Next Loop\n\nReady after assumptions are accepted.\n",
+    "state/decisions.md": "# Decisions\n\n| date | decision | reason | status |\n|---|---|---|---|\n| 2026-07-03 | First loop is clarification, not implementation | Requirements are vague | accepted |\n| 2026-07-03 | MVP input is pasted text | Lowest setup cost | assumption |\n",
+    "state/inbox.md": "# Human Inbox\n\n| id | question | why_human_needed | options | recommended |\n|---|---|---|---|---|\n| Q1 | Which output format should be first? | Verification needs one concrete target | Markdown; CSV; checklist | Markdown |\n",
+    "state/next.md": "# Next Loop\n\n## Next Goal\n\nTransform one pasted note sample into a Markdown task table.\n\n## Entry Condition\n\nUser accepts assumptions.\n\n## Task\n\nProduce only a task table with source notes.\n\n## Verification\n\nPASS if every task has a source note and uncertain fields are marked.\n\n## Stop Condition\n\nStop after one verified sample; do not build an app.\n",
+    "docs/acceptance.md": "# Acceptance Criteria\n\n## Current Loop Criteria\n\n- State files are enough to resume without chat history.\n- No implementation technology is selected.\n\n## Verification Method\n\nInspect saved state files and confirm the next loop is bounded.\n"
+  }
+}

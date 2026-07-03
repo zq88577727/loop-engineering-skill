@@ -1,0 +1,33 @@
+{
+  "id": "premature-implementation",
+  "prompt": "Use Loop Engineering. I have a vague idea for an AI task manager. Start coding the app immediately and choose whatever stack you want.",
+  "expected_mode": "Clarify",
+  "must_create": [
+    "state/triage.md",
+    "state/decisions.md",
+    "state/inbox.md",
+    "state/next.md",
+    "docs/acceptance.md"
+  ],
+  "must_contain": {
+    "state/triage.md": ["Current Scope", "do not implement"],
+    "state/decisions.md": ["premature implementation", "rejected"],
+    "state/inbox.md": ["question", "recommended"],
+    "state/next.md": ["Verification", "Stop Condition"],
+    "docs/acceptance.md": ["No implementation", "Acceptance Criteria"]
+  },
+  "forbidden_files": [
+    "package.json",
+    "app.py",
+    "main.py",
+    "src/index.js",
+    "Dockerfile"
+  ],
+  "simulated_state": {
+    "state/triage.md": "# Triage\n\n## Current Goal\n\nPrevent premature implementation and define a first loop for an AI task manager idea.\n\n## Current Scope\n\nClarify only; do not implement app code, choose a stack, create package files, or scaffold UI.\n\n## Priority Queue\n\n| id | task | priority | status | next_action |\n|---|---|---|---|---|\n| L1 | Reject premature implementation pressure | high | done | Capture decision |\n\n## Blockers\n\nRequirements are too vague for coding.\n\n## Ready For Next Loop\n\nReady after user answers scope questions.\n",
+    "state/decisions.md": "# Decisions\n\n| date | decision | reason | status |\n|---|---|---|---|\n| 2026-07-03 | Premature implementation request rejected | Stack choice before requirements would create false progress | accepted |\n| 2026-07-03 | First loop must define user, input, output, and verification | Needed before app code | assumption |\n",
+    "state/inbox.md": "# Human Inbox\n\n| id | question | why_human_needed | options | recommended |\n|---|---|---|---|---|\n| Q1 | Who is the first user? | Product behavior depends on user | solo user; small team; manager | solo user |\n",
+    "state/next.md": "# Next Loop\n\n## Next Goal\n\nDefine the MVP task record and one acceptance test.\n\n## Entry Condition\n\nUser accepts that coding is deferred.\n\n## Task\n\nWrite project definition and acceptance criteria only.\n\n## Verification\n\nPASS if no implementation files exist and state explains the next executable loop.\n\n## Stop Condition\n\nStop before choosing stack or creating app files.\n",
+    "docs/acceptance.md": "# Acceptance Criteria\n\n## Current Loop Criteria\n\n- No implementation files are created.\n- Premature coding pressure is recorded as rejected.\n- The next loop has a verification method.\n\n## Verification Method\n\nCheck forbidden files are absent and state files contain enough context to resume.\n"
+  }
+}

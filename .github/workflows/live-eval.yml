@@ -1,0 +1,17 @@
+name: Live Behavior Eval
+
+on:
+  workflow_dispatch:
+
+jobs:
+  live-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run live eval
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.5' }}
+        run: python3 evals/run_live_eval.py --require-token
