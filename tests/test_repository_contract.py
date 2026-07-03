@@ -148,7 +148,7 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertIn("python3 -m unittest discover -s tests", text)
 
     def test_release_and_forward_test_artifacts_exist(self) -> None:
-        release_notes = ROOT / "docs/releases/v0.2.1.md"
+        release_notes = ROOT / "docs/releases/v0.3.0.md"
         clarify_forward_test = ROOT / "examples/forward-test-report.md"
         existing_forward_test = ROOT / "examples/forward-test-existing-project.md"
         premature_forward_test = ROOT / "examples/forward-test-premature-implementation.md"
@@ -160,12 +160,12 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertTrue(existing_forward_test.is_file())
         self.assertTrue(premature_forward_test.is_file())
         self.assertTrue(release_script.is_file())
-        self.assertIn("--ref v0.2.1", readme)
+        self.assertIn("--ref v0.3.0", readme)
         release_text = release_notes.read_text(encoding="utf-8")
         self.assertIn("Release Page Status", release_text)
         self.assertIn("GitHub Release page", release_text)
         self.assertIn(
-            "https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.2.1",
+            "https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.3.0",
             release_text,
         )
         self.assertIn("Published:", release_text)
@@ -179,7 +179,7 @@ class PublicReadyAssetTests(unittest.TestCase):
                 PYTHON,
                 "scripts/create_github_release.py",
                 "--tag",
-                "v0.2.1",
+                "v0.3.0",
                 "--dry-run",
             ],
             cwd=ROOT,
@@ -191,9 +191,9 @@ class PublicReadyAssetTests(unittest.TestCase):
         payload = json.loads(result.stdout)
 
         self.assertEqual(payload["status"], "dry-run")
-        self.assertEqual(payload["tag"], "v0.2.1")
-        self.assertEqual(payload["notes_file"], "docs/releases/v0.2.1.md")
-        self.assertIn("gh release create v0.2.1", payload["command"])
+        self.assertEqual(payload["tag"], "v0.3.0")
+        self.assertEqual(payload["notes_file"], "docs/releases/v0.3.0.md")
+        self.assertIn("gh release create v0.3.0", payload["command"])
 
     def test_automated_behavior_eval_assets_exist(self) -> None:
         required = [
