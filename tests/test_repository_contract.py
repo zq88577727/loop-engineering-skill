@@ -5,6 +5,7 @@ import tempfile
 import unittest
 import shutil
 import importlib.util
+import json
 from pathlib import Path
 
 
@@ -132,12 +133,14 @@ class PublicReadyAssetTests(unittest.TestCase):
         clarify_forward_test = ROOT / "examples/forward-test-report.md"
         existing_forward_test = ROOT / "examples/forward-test-existing-project.md"
         premature_forward_test = ROOT / "examples/forward-test-premature-implementation.md"
+        release_script = ROOT / "scripts/create_github_release.py"
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
         self.assertTrue(release_notes.is_file())
         self.assertTrue(clarify_forward_test.is_file())
         self.assertTrue(existing_forward_test.is_file())
         self.assertTrue(premature_forward_test.is_file())
+        self.assertTrue(release_script.is_file())
         self.assertIn("--ref v0.2.0", readme)
         release_text = release_notes.read_text(encoding="utf-8")
         self.assertIn("Release Page Status", release_text)
@@ -146,6 +149,28 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertIn("PASS", clarify_forward_test.read_text(encoding="utf-8"))
         self.assertIn("PASS", existing_forward_test.read_text(encoding="utf-8"))
         self.assertIn("PASS", premature_forward_test.read_text(encoding="utf-8"))
+
+    def test_release_script_dry_run_reports_exact_command(self) -> None:
+        result = subprocess.run(
+            [
+                PYTHON,
+                "scripts/create_github_release.py",
+                "--tag",
+                "v0.2.0",
+                "--dry-run",
+            ],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+
+        payload = json.loads(result.stdout)
+
+        self.assertEqual(payload["status"], "dry-run")
+        self.assertEqual(payload["tag"], "v0.2.0")
+        self.assertEqual(payload["notes_file"], "docs/releases/v0.2.0.md")
+        self.assertIn("gh release create v0.2.0", payload["command"])
 
 
 if __name__ == "__main__":

@@ -15,6 +15,7 @@ REQUIRED_FILES = [
     ".github/workflows/validate.yml",
     "docs/releases/v0.2.0.md",
     "assets/loop-engineering-flow.png",
+    "scripts/create_github_release.py",
     "scripts/validate_repo.py",
     "tests/test_repository_contract.py",
     "skills/loop-engineering/SKILL.md",
