@@ -145,7 +145,11 @@ class PublicReadyAssetTests(unittest.TestCase):
         release_text = release_notes.read_text(encoding="utf-8")
         self.assertIn("Release Page Status", release_text)
         self.assertIn("GitHub Release page", release_text)
-        self.assertIn("blocked", release_text.lower())
+        self.assertIn(
+            "https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.2.0",
+            release_text,
+        )
+        self.assertIn("Published: 2026-07-03T15:29:56Z", release_text)
         self.assertIn("PASS", clarify_forward_test.read_text(encoding="utf-8"))
         self.assertIn("PASS", existing_forward_test.read_text(encoding="utf-8"))
         self.assertIn("PASS", premature_forward_test.read_text(encoding="utf-8"))
