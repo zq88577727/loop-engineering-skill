@@ -129,14 +129,23 @@ class PublicReadyAssetTests(unittest.TestCase):
 
     def test_release_and_forward_test_artifacts_exist(self) -> None:
         release_notes = ROOT / "docs/releases/v0.2.0.md"
-        forward_test = ROOT / "examples/forward-test-report.md"
+        clarify_forward_test = ROOT / "examples/forward-test-report.md"
+        existing_forward_test = ROOT / "examples/forward-test-existing-project.md"
+        premature_forward_test = ROOT / "examples/forward-test-premature-implementation.md"
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
         self.assertTrue(release_notes.is_file())
-        self.assertTrue(forward_test.is_file())
+        self.assertTrue(clarify_forward_test.is_file())
+        self.assertTrue(existing_forward_test.is_file())
+        self.assertTrue(premature_forward_test.is_file())
         self.assertIn("--ref v0.2.0", readme)
-        self.assertIn("Release Page Status", release_notes.read_text(encoding="utf-8"))
-        self.assertIn("PASS", forward_test.read_text(encoding="utf-8"))
+        release_text = release_notes.read_text(encoding="utf-8")
+        self.assertIn("Release Page Status", release_text)
+        self.assertIn("GitHub Release page", release_text)
+        self.assertIn("blocked", release_text.lower())
+        self.assertIn("PASS", clarify_forward_test.read_text(encoding="utf-8"))
+        self.assertIn("PASS", existing_forward_test.read_text(encoding="utf-8"))
+        self.assertIn("PASS", premature_forward_test.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

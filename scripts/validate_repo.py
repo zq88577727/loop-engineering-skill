@@ -30,6 +30,8 @@ REQUIRED_FILES = [
     "examples/existing-project-continue/user-prompt.md",
     "examples/existing-project-continue/expected-agent-output.md",
     "examples/forward-test-report.md",
+    "examples/forward-test-existing-project.md",
+    "examples/forward-test-premature-implementation.md",
     "examples/invalid-loop.md",
 ]
 
