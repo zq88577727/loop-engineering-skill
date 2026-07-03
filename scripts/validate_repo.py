@@ -83,6 +83,7 @@ LIVE_EVAL_REQUIRED_PHRASES = [
     "workflow_dispatch",
     "OPENAI_API_KEY",
     "python3 evals/run_live_eval.py",
+    "codex exec",
 ]
 
 

@@ -14,4 +14,9 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.5' }}
-        run: python3 evals/run_live_eval.py --require-token
+        run: |
+          if ! command -v codex >/dev/null 2>&1; then
+            npm install -g @openai/codex
+          fi
+          codex exec --help
+          python3 evals/run_live_eval.py --require-token

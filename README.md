@@ -209,8 +209,21 @@ workflow `.github/workflows/live-eval.yml`, or locally with:
 OPENAI_API_KEY=... python3 evals/run_live_eval.py --require-token
 ```
 
-Live evals are intentionally not part of default CI so public contributors can
-reproduce the default quality gate without an API key.
+The live eval starts real `codex exec` sessions in temporary workspaces, checks
+the state files those sessions write, and remains outside default CI so public
+contributors can reproduce the default quality gate without an API key.
+
+Preview the exact Codex commands without running a model:
+
+```bash
+python3 evals/run_live_eval.py --dry-run
+```
+
+Run one live scenario while debugging:
+
+```bash
+OPENAI_API_KEY=... python3 evals/run_live_eval.py --scenario premature-implementation --require-token
+```
 
 ## Design Principles
 

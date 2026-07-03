@@ -28,7 +28,10 @@ def validate_workspace(workspace: Path, scenario: dict[str, Any]) -> list[str]:
             continue
         text = path.read_text(encoding="utf-8").lower()
         for phrase in phrases:
-            if phrase.lower() not in text:
+            if isinstance(phrase, list):
+                if not any(str(option).lower() in text for option in phrase):
+                    errors.append(f"{scenario['id']}: {relative} missing one of {phrase!r}")
+            elif str(phrase).lower() not in text:
                 errors.append(f"{scenario['id']}: {relative} missing phrase {phrase!r}")
 
     for relative in scenario.get("forbidden_files", []):

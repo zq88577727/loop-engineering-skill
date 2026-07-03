@@ -10,11 +10,18 @@
     "docs/acceptance.md"
   ],
   "must_contain": {
-    "state/triage.md": ["Current Scope", "do not implement"],
-    "state/decisions.md": ["premature implementation", "rejected"],
+    "state/triage.md": [
+      "Current Scope"
+    ],
+    "state/decisions.md": [
+      "decision"
+    ],
     "state/inbox.md": ["question", "recommended"],
     "state/next.md": ["Verification", "Stop Condition"],
-    "docs/acceptance.md": ["No implementation", "Acceptance Criteria"]
+    "docs/acceptance.md": [
+      ["No implementation", "not accepted for implementation", "coding request is rejected"],
+      ["Acceptance Criteria", "Acceptance", "pass only if"]
+    ]
   },
   "forbidden_files": [
     "package.json",

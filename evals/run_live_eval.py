@@ -1,142 +1,246 @@
 #!/usr/bin/env python3
-"""Run optional live model behavior evals for Loop Engineering."""
+"""Run optional end-to-end Codex session evals for Loop Engineering."""
 
 from __future__ import annotations
 
 import argparse
 import json
 import os
-import urllib.error
-import urllib.request
+import shutil
+import subprocess
+import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
-from validators.validate_loop_output import load_scenario
+from validators.validate_loop_output import load_scenario, scenario_result
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SCENARIO_DIR = ROOT / "evals/scenarios"
 REPORT = ROOT / "evals/reports/live-eval-report.md"
+SKILL = ROOT / "skills/loop-engineering/SKILL.md"
+WORKFLOW = ROOT / "skills/loop-engineering/references/full-workflow.md"
 
 
-SYSTEM_PROMPT = """You are evaluating the loop-engineering Codex skill.
-Respond as the skill should respond. Do not implement code. Include these
-sections: mode, confirmed facts, assumptions, current loop, acceptance criteria,
-verification method, state files to read or write."""
+def codex_available(binary: str) -> bool:
+    return shutil.which(binary) is not None
 
 
-def response_text(data: dict[str, object]) -> str:
-    if isinstance(data.get("output_text"), str):
-        return str(data["output_text"])
-    chunks: list[str] = []
-    for item in data.get("output", []):  # type: ignore[union-attr]
-        for content in item.get("content", []):
-            if content.get("type") in {"output_text", "text"}:
-                chunks.append(str(content.get("text", "")))
-    return "\n".join(chunks)
-
-
-def call_openai(api_key: str, model: str, prompt: str) -> str:
-    payload = json.dumps(
-        {
-            "model": model,
-            "input": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt},
-            ],
-        }
-    ).encode("utf-8")
-    request = urllib.request.Request(
-        "https://api.openai.com/v1/responses",
-        data=payload,
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        },
-        method="POST",
+def has_live_auth() -> bool:
+    if os.environ.get("OPENAI_API_KEY") or os.environ.get("CODEX_HOME"):
+        return True
+    auth = subprocess.run(
+        ["codex", "login", "status"],
+        text=True,
+        capture_output=True,
     )
-    with urllib.request.urlopen(request, timeout=90) as response:
-        data = json.loads(response.read().decode("utf-8"))
-    return response_text(data)
+    return auth.returncode == 0
 
 
-def validate_text(scenario: dict[str, object], text: str) -> list[str]:
-    lower = text.lower()
-    required = [
-        "mode",
-        "assumption",
-        "current loop",
-        "acceptance",
-        "verification",
-        "state",
+def build_prompt(scenario: dict[str, Any]) -> str:
+    skill_text = SKILL.read_text(encoding="utf-8")
+    workflow_text = WORKFLOW.read_text(encoding="utf-8")
+    required_files = "\n".join(f"- {path}" for path in scenario.get("must_create", []))
+    forbidden_files = "\n".join(f"- {path}" for path in scenario.get("forbidden_files", []))
+    return f"""You are running an end-to-end behavior eval for the Loop Engineering skill.
+
+Use the skill instructions below as authoritative. Work only in the current
+workspace. Create or update the expected Loop Engineering state files. Do not
+create implementation files unless the scenario explicitly allows them.
+
+<loop_engineering_skill>
+{skill_text}
+</loop_engineering_skill>
+
+<loop_engineering_workflow_reference>
+{workflow_text}
+</loop_engineering_workflow_reference>
+
+Scenario id: {scenario["id"]}
+Expected mode: {scenario.get("expected_mode", "")}
+User prompt:
+{scenario["prompt"]}
+
+Required behavior:
+- Run the Loop Engineering workflow for this prompt.
+- Persist the result to state files under this workspace.
+- Create or update every required file listed below.
+- Do not create any forbidden file listed below.
+- End with a concise PASS/REJECT style summary.
+
+Required files:
+{required_files}
+
+Forbidden files:
+{forbidden_files}
+"""
+
+
+def build_command(binary: str, workspace: Path, prompt: str, model: str | None, output_file: Path) -> list[str]:
+    command = [
+        binary,
+        "--ask-for-approval",
+        "never",
+        "exec",
+        "--cd",
+        str(workspace),
+        "--skip-git-repo-check",
+        "--sandbox",
+        "workspace-write",
+        "--output-last-message",
+        str(output_file),
+        "--",
+        prompt,
     ]
-    errors = [f"missing response marker: {item}" for item in required if item not in lower]
-    if scenario["id"] == "premature-implementation":
-        forbidden = ["package.json", "npm install", "def main", "import react"]
-        errors.extend([f"premature implementation marker present: {item}" for item in forbidden if item in lower])
-    return errors
+    if model:
+        command[2:2] = ["--model", model]
+    return command
 
 
-def write_report(payload: dict[str, object]) -> None:
+def init_workspace(workspace: Path) -> None:
+    (workspace / "README.md").write_text("# Live Eval Workspace\n", encoding="utf-8")
+
+
+def run_scenario(scenario_path: Path, args: argparse.Namespace) -> dict[str, Any]:
+    scenario = load_scenario(scenario_path)
+    if args.keep_workspace:
+        temp_dir = None
+        workspace = Path(tempfile.mkdtemp(prefix=f"loop-live-{scenario['id']}-"))
+    else:
+        temp_dir = tempfile.TemporaryDirectory(prefix=f"loop-live-{scenario['id']}-")
+        workspace = Path(temp_dir.name)
+    init_workspace(workspace)
+    output_file = workspace / "codex-final-message.txt"
+    prompt = build_prompt(scenario)
+    command = build_command(args.codex_binary, workspace, prompt, args.model, output_file)
+    run = subprocess.run(
+        command,
+        cwd=workspace,
+        text=True,
+        capture_output=True,
+        timeout=args.timeout,
+    )
+    errors: list[str] = []
+    if run.returncode != 0:
+        errors.append(f"codex exec failed with exit {run.returncode}: {run.stderr.strip()}")
+    errors.extend(scenario_result(workspace, scenario)["errors"])
+    if not output_file.is_file():
+        errors.append("codex final message file was not created")
+    status = "PASS" if not errors else "REJECT"
+    if temp_dir is not None and (status == "PASS" or not args.keep_workspace):
+        temp_dir.cleanup()
+    return {
+        "id": scenario["id"],
+        "status": status,
+        "errors": errors,
+        "workspace": str(workspace),
+    }
+
+
+def scenario_paths(selected: str | None) -> list[Path]:
+    paths = sorted(SCENARIO_DIR.glob("*.yaml"))
+    if selected is None:
+        return paths
+    return [path for path in paths if path.stem == selected]
+
+
+def dry_run_payload(args: argparse.Namespace) -> dict[str, Any]:
+    scenarios = []
+    for path in scenario_paths(args.scenario):
+        scenario = load_scenario(path)
+        workspace = Path("/tmp") / f"loop-live-{scenario['id']}"
+        output_file = workspace / "codex-final-message.txt"
+        command = build_command(
+            args.codex_binary,
+            workspace,
+            build_prompt(scenario),
+            args.model,
+            output_file,
+        )
+        scenarios.append({"id": scenario["id"], "command": command})
+    return {
+        "status": "DRY_RUN",
+        "runner": "codex exec",
+        "scenario_count": len(scenarios),
+        "scenarios": scenarios,
+    }
+
+
+def write_report(payload: dict[str, Any]) -> None:
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     lines = [
         "# Live Behavior Eval Report",
         "",
         f"- Generated: {payload['generated_at']}",
         f"- Verdict: {payload['status']}",
-        f"- Model: {payload.get('model', 'not-run')}",
+        f"- Runner: {payload.get('runner', 'codex exec')}",
+        f"- Model: {payload.get('model', 'default')}",
         "",
         "| scenario | status | errors |",
         "|---|---|---|",
     ]
-    for scenario in payload.get("scenarios", []):  # type: ignore[union-attr]
-        errors = "; ".join(scenario["errors"]) if scenario["errors"] else ""
+    for scenario in payload.get("scenarios", []):
+        errors = "; ".join(scenario["errors"]) if scenario.get("errors") else ""
         lines.append(f"| {scenario['id']} | {scenario['status']} | {errors} |")
     lines.append("")
     REPORT.write_text("\n".join(lines), encoding="utf-8")
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run optional live model evals.")
-    parser.add_argument("--model", default=os.environ.get("OPENAI_MODEL", "gpt-5.5"))
+    parser = argparse.ArgumentParser(description="Run optional live Codex session evals.")
+    parser.add_argument("--codex-binary", default=os.environ.get("CODEX_BINARY", "codex"))
+    parser.add_argument("--model", default=os.environ.get("OPENAI_MODEL"))
+    parser.add_argument("--timeout", type=int, default=int(os.environ.get("CODEX_LIVE_EVAL_TIMEOUT", "600")))
     parser.add_argument("--require-token", action="store_true")
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--scenario", help="Run one scenario id instead of all scenarios.")
+    parser.add_argument("--keep-workspace", action="store_true", help="Keep failed live eval workspaces for inspection.")
     args = parser.parse_args()
 
-    api_key = os.environ.get("OPENAI_API_KEY", "")
-    if not api_key:
+    if args.dry_run:
+        payload = dry_run_payload(args)
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 0
+
+    if not codex_available(args.codex_binary):
         payload = {
             "status": "SKIP",
-            "reason": "OPENAI_API_KEY is not set",
+            "reason": f"{args.codex_binary!r} was not found on PATH",
             "generated_at": datetime.now(timezone.utc).isoformat(),
+            "runner": "codex exec",
             "scenarios": [],
         }
         write_report(payload)
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1 if args.require_token else 0
 
-    results = []
-    for path in sorted(SCENARIO_DIR.glob("*.yaml")):
-        scenario = load_scenario(path)
-        try:
-            text = call_openai(api_key, args.model, str(scenario["prompt"]))
-            errors = validate_text(scenario, text)
-        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
-            errors = [f"live request failed: {exc}"]
-        results.append(
-            {
-                "id": scenario["id"],
-                "status": "PASS" if not errors else "REJECT",
-                "errors": errors,
-            }
-        )
+    if not has_live_auth():
+        payload = {
+            "status": "SKIP",
+            "reason": "No OPENAI_API_KEY or CODEX_HOME auth context is available",
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "runner": "codex exec",
+            "scenarios": [],
+        }
+        write_report(payload)
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1 if args.require_token else 0
 
-    status = "PASS" if all(result["status"] == "PASS" for result in results) else "REJECT"
+    paths = scenario_paths(args.scenario)
+    if not paths:
+        print(json.dumps({"status": "error", "reason": "scenario-not-found"}, indent=2, sort_keys=True))
+        return 1
+    scenarios = [run_scenario(path, args) for path in paths]
+    status = "PASS" if scenarios and all(result["status"] == "PASS" for result in scenarios) else "REJECT"
     payload = {
         "status": status,
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "model": args.model,
-        "scenario_count": len(results),
-        "scenarios": results,
+        "runner": "codex exec",
+        "model": args.model or "default",
+        "scenario_count": len(scenarios),
+        "scenarios": scenarios,
     }
     write_report(payload)
     print(json.dumps(payload, indent=2, sort_keys=True))

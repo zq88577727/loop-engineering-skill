@@ -23,9 +23,28 @@ Run manually with an OpenAI API key:
 OPENAI_API_KEY=... python3 evals/run_live_eval.py --require-token
 ```
 
-The live eval sends each scenario prompt to the Responses API and checks that the
-response follows the Loop Engineering contract. It is intentionally not part of
-default CI because public contributors should not need a token.
+The live eval starts a real non-interactive Codex session with `codex exec` for
+each scenario. Each session runs in a temporary workspace with
+`--sandbox workspace-write` and `--ask-for-approval never`, writes actual state
+files, and is then checked by `evals/validators/validate_loop_output.py`.
+
+Preview the exact Codex commands without running a model:
+
+```bash
+python3 evals/run_live_eval.py --dry-run
+```
+
+Run one scenario while debugging:
+
+```bash
+OPENAI_API_KEY=... python3 evals/run_live_eval.py --scenario premature-implementation --require-token
+```
+
+Live eval is intentionally not part of default CI because public contributors
+should not need a token or Codex auth context.
+
+`evals/reports/live-eval-report.md` is generated locally and ignored by git
+because it depends on credentials, model availability, and run time.
 
 ## Scenarios
 

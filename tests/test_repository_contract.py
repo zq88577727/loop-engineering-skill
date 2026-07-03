@@ -234,6 +234,34 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertIn("workflow_dispatch", live_workflow)
         self.assertIn("OPENAI_API_KEY", live_workflow)
         self.assertIn("python3 evals/run_live_eval.py", live_workflow)
+        self.assertIn("codex exec", live_workflow)
+        live_script = (ROOT / "evals/run_live_eval.py").read_text(encoding="utf-8")
+        self.assertIn('"codex"', live_script)
+        self.assertIn('"login"', live_script)
+        self.assertIn('"status"', live_script)
+
+    def test_live_eval_dry_run_uses_codex_exec_sandbox(self) -> None:
+        result = subprocess.run(
+            [PYTHON, "evals/run_live_eval.py", "--dry-run"],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+
+        payload = json.loads(result.stdout)
+
+        self.assertEqual(payload["status"], "DRY_RUN")
+        self.assertEqual(payload["runner"], "codex exec")
+        self.assertEqual(payload["scenario_count"], 3)
+        for scenario in payload["scenarios"]:
+            command_list = scenario["command"]
+            command = " ".join(command_list)
+            self.assertEqual(command_list[0], "codex")
+            self.assertIn("exec", command_list)
+            self.assertIn("--sandbox workspace-write", command)
+            self.assertIn("--ask-for-approval never", command)
+            self.assertIn("--skip-git-repo-check", command)
 
 
 if __name__ == "__main__":
