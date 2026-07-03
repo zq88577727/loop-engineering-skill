@@ -22,6 +22,12 @@
     "src/index.js",
     "pyproject.toml"
   ],
+  "semantic_contract": {
+    "requires_loop_state": true,
+    "requires_next_loop_verification": true,
+    "requires_human_inbox": true,
+    "captures_clarification_boundary": true
+  },
   "simulated_state": {
     "state/triage.md": "# Triage\n\n## Current Goal\n\nClarify a vague meeting-notes-to-tasks tool idea before implementation.\n\n## Current Scope\n\nClarify and scaffold only; do not implement UI, parsing, storage, or integrations.\n\n## Priority Queue\n\n| id | task | priority | status | next_action |\n|---|---|---|---|---|\n| L1 | Define MVP input and output | high | ready | Review assumptions |\n\n## Blockers\n\n- Human has not chosen output format.\n\n## Ready For Next Loop\n\nReady after assumptions are accepted.\n",
     "state/decisions.md": "# Decisions\n\n| date | decision | reason | status |\n|---|---|---|---|\n| 2026-07-03 | First loop is clarification, not implementation | Requirements are vague | accepted |\n| 2026-07-03 | MVP input is pasted text | Lowest setup cost | assumption |\n",

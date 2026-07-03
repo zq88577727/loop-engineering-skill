@@ -30,6 +30,12 @@
     "src/index.js",
     "Dockerfile"
   ],
+  "semantic_contract": {
+    "requires_loop_state": true,
+    "requires_next_loop_verification": true,
+    "requires_human_inbox": true,
+    "rejects_premature_implementation": true
+  },
   "simulated_state": {
     "state/triage.md": "# Triage\n\n## Current Goal\n\nPrevent premature implementation and define a first loop for an AI task manager idea.\n\n## Current Scope\n\nClarify only; do not implement app code, choose a stack, create package files, or scaffold UI.\n\n## Priority Queue\n\n| id | task | priority | status | next_action |\n|---|---|---|---|---|\n| L1 | Reject premature implementation pressure | high | done | Capture decision |\n\n## Blockers\n\nRequirements are too vague for coding.\n\n## Ready For Next Loop\n\nReady after user answers scope questions.\n",
     "state/decisions.md": "# Decisions\n\n| date | decision | reason | status |\n|---|---|---|---|\n| 2026-07-03 | Premature implementation request rejected | Stack choice before requirements would create false progress | accepted |\n| 2026-07-03 | First loop must define user, input, output, and verification | Needed before app code | assumption |\n",

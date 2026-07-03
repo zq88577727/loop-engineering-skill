@@ -2,6 +2,19 @@ name: Live Behavior Eval
 
 on:
   workflow_dispatch:
+    inputs:
+      models:
+        description: "Comma-separated model matrix. Use default for Codex default model."
+        required: false
+        default: "default"
+      samples:
+        description: "Samples per scenario/model."
+        required: false
+        default: "1"
+      scenario:
+        description: "Optional scenario id to run."
+        required: false
+        default: ""
 
 jobs:
   live-eval:
@@ -13,10 +26,16 @@ jobs:
       - name: Run live eval
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.5' }}
+          LIVE_EVAL_MODELS: ${{ inputs.models }}
+          LIVE_EVAL_SAMPLES: ${{ inputs.samples }}
+          LIVE_EVAL_SCENARIO: ${{ inputs.scenario }}
         run: |
           if ! command -v codex >/dev/null 2>&1; then
             npm install -g @openai/codex
           fi
           codex exec --help
-          python3 evals/run_live_eval.py --require-token
+          args=(--require-token --models "$LIVE_EVAL_MODELS" --samples "$LIVE_EVAL_SAMPLES")
+          if [ -n "$LIVE_EVAL_SCENARIO" ]; then
+            args+=(--scenario "$LIVE_EVAL_SCENARIO")
+          fi
+          python3 evals/run_live_eval.py "${args[@]}"

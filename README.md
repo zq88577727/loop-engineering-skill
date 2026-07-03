@@ -210,10 +210,11 @@ OPENAI_API_KEY=... python3 evals/run_live_eval.py --require-token
 ```
 
 The live eval starts real `codex exec` sessions in temporary workspaces, checks
-the state files those sessions write, and remains outside default CI so public
-contributors can reproduce the default quality gate without an API key.
+the state files those sessions write, applies scenario-level semantic contracts,
+and remains outside default CI so public contributors can reproduce the default
+quality gate without an API key.
 
-Preview the exact Codex commands without running a model:
+Preview the Codex command shape without running a model:
 
 ```bash
 python3 evals/run_live_eval.py --dry-run
@@ -224,6 +225,17 @@ Run one live scenario while debugging:
 ```bash
 OPENAI_API_KEY=... python3 evals/run_live_eval.py --scenario premature-implementation --require-token
 ```
+
+Run repeated samples across a small model matrix:
+
+```bash
+OPENAI_API_KEY=... python3 evals/run_live_eval.py --models default,gpt-5.5 --samples 3 --require-token
+```
+
+Failure samples are archived locally under `evals/reports/failures/*.json` with
+the scenario, model, sample number, validator errors, workspace file list, and
+required state-file snippets. These JSON files are ignored by git; the tracked
+directory documents the reproducible failure-collection path.
 
 ## Design Principles
 

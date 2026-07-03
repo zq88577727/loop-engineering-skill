@@ -3,3 +3,4 @@ __pycache__/
 .pytest_cache/
 tmp/
 evals/reports/live-eval-report.md
+evals/reports/failures/*.json

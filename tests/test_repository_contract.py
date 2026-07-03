@@ -25,6 +25,17 @@ def load_validator():
     return module
 
 
+def load_output_validator():
+    spec = importlib.util.spec_from_file_location(
+        "validate_loop_output", ROOT / "evals/validators/validate_loop_output.py"
+    )
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Could not load validate_loop_output.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 class RepositoryContractTests(unittest.TestCase):
     def run_cmd(self, *args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
@@ -262,6 +273,71 @@ class PublicReadyAssetTests(unittest.TestCase):
             self.assertIn("--sandbox workspace-write", command)
             self.assertIn("--ask-for-approval never", command)
             self.assertIn("--skip-git-repo-check", command)
+
+    def test_live_eval_dry_run_expands_model_sample_matrix(self) -> None:
+        result = subprocess.run(
+            [
+                PYTHON,
+                "evals/run_live_eval.py",
+                "--dry-run",
+                "--scenario",
+                "premature-implementation",
+                "--models",
+                "default,gpt-5.5",
+                "--samples",
+                "2",
+            ],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+
+        payload = json.loads(result.stdout)
+
+        self.assertEqual(payload["status"], "DRY_RUN")
+        self.assertEqual(payload["scenario_count"], 1)
+        self.assertEqual(payload["model_count"], 2)
+        self.assertEqual(payload["sample_count"], 2)
+        self.assertEqual(payload["run_count"], 4)
+        observed = {(run["model"], run["sample"]) for run in payload["runs"]}
+        self.assertEqual(
+            observed,
+            {
+                ("default", 1),
+                ("default", 2),
+                ("gpt-5.5", 1),
+                ("gpt-5.5", 2),
+            },
+        )
+        model_command = next(run["command"] for run in payload["runs"] if run["model"] == "gpt-5.5")
+        default_command = next(run["command"] for run in payload["runs"] if run["model"] == "default")
+        self.assertIn("--model", model_command)
+        self.assertIn("gpt-5.5", model_command)
+        self.assertNotIn("--model", default_command)
+
+    def test_live_eval_failure_archive_is_part_of_contract(self) -> None:
+        self.assertTrue((ROOT / "evals/reports/failures/.gitkeep").is_file())
+        gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
+        live_script = (ROOT / "evals/run_live_eval.py").read_text(encoding="utf-8")
+
+        self.assertIn("evals/reports/failures/*.json", gitignore)
+        self.assertIn("archive_failure", live_script)
+        self.assertIn("--failure-dir", live_script)
+
+    def test_semantic_validator_rejects_state_without_loop_contract(self) -> None:
+        validator = load_output_validator()
+        scenario = validator.load_scenario(ROOT / "evals/scenarios/vague-idea.yaml")
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = Path(tmp)
+            for relative in scenario["must_create"]:
+                path = workspace / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("placeholder question recommended\n", encoding="utf-8")
+
+            errors = validator.validate_workspace(workspace, scenario)
+
+        self.assertTrue(any("semantic contract" in error for error in errors))
 
 
 if __name__ == "__main__":

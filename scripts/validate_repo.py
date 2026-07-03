@@ -44,6 +44,7 @@ REQUIRED_FILES = [
     "evals/scenarios/existing-project-continue.yaml",
     "evals/scenarios/premature-implementation.yaml",
     "evals/reports/offline-eval-report.md",
+    "evals/reports/failures/.gitkeep",
 ]
 
 SKILL_REQUIRED_PHRASES = [
@@ -69,6 +70,8 @@ README_REQUIRED_PHRASES = [
     "v0.2.1",
     "python3 evals/run_offline_eval.py",
     "OPENAI_API_KEY",
+    "--models default,gpt-5.5",
+    "evals/reports/failures/*.json",
 ]
 
 CI_REQUIRED_PHRASES = [
@@ -84,6 +87,8 @@ LIVE_EVAL_REQUIRED_PHRASES = [
     "OPENAI_API_KEY",
     "python3 evals/run_live_eval.py",
     "codex exec",
+    "samples",
+    "models",
 ]
 
 
