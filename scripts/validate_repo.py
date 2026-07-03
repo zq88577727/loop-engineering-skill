@@ -14,6 +14,7 @@ REQUIRED_FILES = [
     "LICENSE",
     ".github/workflows/validate.yml",
     "docs/releases/v0.2.0.md",
+    "docs/releases/v0.2.1.md",
     "assets/loop-engineering-flow.png",
     "scripts/create_github_release.py",
     "scripts/validate_repo.py",
@@ -51,12 +52,12 @@ SKILL_REQUIRED_PHRASES = [
 README_REQUIRED_PHRASES = [
     "install-skill-from-github.py",
     "--repo zq88577727/loop-engineering-skill",
-    "--ref v0.2.0",
+    "--ref v0.2.1",
     "--path skills/loop-engineering",
     "Restart Codex",
     "python3 scripts/validate_repo.py",
     "python3 -m unittest discover -s tests",
-    "v0.2.0",
+    "v0.2.1",
 ]
 
 CI_REQUIRED_PHRASES = [

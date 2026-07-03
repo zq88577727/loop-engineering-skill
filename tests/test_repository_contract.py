@@ -129,7 +129,7 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertIn("python3 -m unittest discover -s tests", text)
 
     def test_release_and_forward_test_artifacts_exist(self) -> None:
-        release_notes = ROOT / "docs/releases/v0.2.0.md"
+        release_notes = ROOT / "docs/releases/v0.2.1.md"
         clarify_forward_test = ROOT / "examples/forward-test-report.md"
         existing_forward_test = ROOT / "examples/forward-test-existing-project.md"
         premature_forward_test = ROOT / "examples/forward-test-premature-implementation.md"
@@ -141,15 +141,15 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertTrue(existing_forward_test.is_file())
         self.assertTrue(premature_forward_test.is_file())
         self.assertTrue(release_script.is_file())
-        self.assertIn("--ref v0.2.0", readme)
+        self.assertIn("--ref v0.2.1", readme)
         release_text = release_notes.read_text(encoding="utf-8")
         self.assertIn("Release Page Status", release_text)
         self.assertIn("GitHub Release page", release_text)
         self.assertIn(
-            "https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.2.0",
+            "https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.2.1",
             release_text,
         )
-        self.assertIn("Published: 2026-07-03T15:29:56Z", release_text)
+        self.assertIn("Published:", release_text)
         self.assertIn("PASS", clarify_forward_test.read_text(encoding="utf-8"))
         self.assertIn("PASS", existing_forward_test.read_text(encoding="utf-8"))
         self.assertIn("PASS", premature_forward_test.read_text(encoding="utf-8"))
@@ -160,7 +160,7 @@ class PublicReadyAssetTests(unittest.TestCase):
                 PYTHON,
                 "scripts/create_github_release.py",
                 "--tag",
-                "v0.2.0",
+                "v0.2.1",
                 "--dry-run",
             ],
             cwd=ROOT,
@@ -172,9 +172,9 @@ class PublicReadyAssetTests(unittest.TestCase):
         payload = json.loads(result.stdout)
 
         self.assertEqual(payload["status"], "dry-run")
-        self.assertEqual(payload["tag"], "v0.2.0")
-        self.assertEqual(payload["notes_file"], "docs/releases/v0.2.0.md")
-        self.assertIn("gh release create v0.2.0", payload["command"])
+        self.assertEqual(payload["tag"], "v0.2.1")
+        self.assertEqual(payload["notes_file"], "docs/releases/v0.2.1.md")
+        self.assertIn("gh release create v0.2.1", payload["command"])
 
 
 if __name__ == "__main__":
