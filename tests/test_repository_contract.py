@@ -127,6 +127,17 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertIn("python3 scripts/validate_repo.py", text)
         self.assertIn("python3 -m unittest discover -s tests", text)
 
+    def test_release_and_forward_test_artifacts_exist(self) -> None:
+        release_notes = ROOT / "docs/releases/v0.2.0.md"
+        forward_test = ROOT / "examples/forward-test-report.md"
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+        self.assertTrue(release_notes.is_file())
+        self.assertTrue(forward_test.is_file())
+        self.assertIn("--ref v0.2.0", readme)
+        self.assertIn("Release Page Status", release_notes.read_text(encoding="utf-8"))
+        self.assertIn("PASS", forward_test.read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()

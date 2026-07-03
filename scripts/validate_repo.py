@@ -13,6 +13,7 @@ REQUIRED_FILES = [
     "README.md",
     "LICENSE",
     ".github/workflows/validate.yml",
+    "docs/releases/v0.2.0.md",
     "assets/loop-engineering-flow.png",
     "scripts/validate_repo.py",
     "tests/test_repository_contract.py",
@@ -28,6 +29,7 @@ REQUIRED_FILES = [
     "examples/vague-idea-to-first-loop/generated-state/next.md",
     "examples/existing-project-continue/user-prompt.md",
     "examples/existing-project-continue/expected-agent-output.md",
+    "examples/forward-test-report.md",
     "examples/invalid-loop.md",
 ]
 
@@ -46,6 +48,7 @@ SKILL_REQUIRED_PHRASES = [
 README_REQUIRED_PHRASES = [
     "install-skill-from-github.py",
     "--repo zq88577727/loop-engineering-skill",
+    "--ref v0.2.0",
     "--path skills/loop-engineering",
     "Restart Codex",
     "python3 scripts/validate_repo.py",

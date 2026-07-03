@@ -54,12 +54,14 @@ Install from GitHub:
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo zq88577727/loop-engineering-skill \
+  --ref v0.2.0 \
   --path skills/loop-engineering
 ```
 
 Restart Codex after installation so the skill is discoverable.
 
-Recommended stable baseline: `v0.2.0`.
+Recommended stable baseline: `v0.2.0`. Omit `--ref v0.2.0` only when you
+intentionally want the latest `main` branch version.
 
 After restart, verify activation with a natural prompt:
 
