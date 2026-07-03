@@ -6,6 +6,7 @@ import unittest
 import shutil
 import importlib.util
 import json
+import os
 from pathlib import Path
 
 
@@ -201,13 +202,15 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertEqual(missing, [])
 
     def test_offline_eval_runs_without_token(self) -> None:
+        env = dict(os.environ)
+        env.pop("OPENAI_API_KEY", None)
         result = subprocess.run(
             [PYTHON, "evals/run_offline_eval.py"],
             cwd=ROOT,
             check=True,
             text=True,
             capture_output=True,
-            env={},
+            env=env,
         )
 
         payload = json.loads(result.stdout)
