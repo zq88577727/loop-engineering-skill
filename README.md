@@ -6,7 +6,7 @@
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827)](skills/loop-engineering/SKILL.md)
-[![Verified](https://img.shields.io/badge/verified-local%20smoke%20tests-16a34a)](#quality-gates)
+[![Verified](https://img.shields.io/badge/v0.2.0-public%20ready-16a34a)](#quality-gates)
 [![GitHub stars](https://img.shields.io/github/stars/zq88577727/loop-engineering-skill?style=social)](https://github.com/zq88577727/loop-engineering-skill/stargazers)
 
 Turn unclear intent into a loop that clarifies, defines, executes, verifies,
@@ -59,6 +59,17 @@ python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-githu
 
 Restart Codex after installation so the skill is discoverable.
 
+Recommended stable baseline: `v0.2.0`.
+
+After restart, verify activation with a natural prompt:
+
+```text
+Use Loop Engineering for this vague idea: I want a small browser extension for saving useful snippets, but I do not know the exact requirements yet.
+```
+
+Codex should classify the request as a Loop Engineering task, clarify assumptions,
+define the first loop, and create or propose state files before implementation.
+
 ## Quick Start
 
 Natural trigger examples:
@@ -97,6 +108,12 @@ state/inbox.md
 state/next.md
 ```
 
+Preview the files without writing:
+
+```bash
+python3 ~/.codex/skills/loop-engineering/scripts/init_loop_project.py --target . --dry-run
+```
+
 ## Workflow Contract
 
 Loop Engineering keeps Codex work inside a visible loop:
@@ -120,6 +137,12 @@ Loop Engineering keeps Codex work inside a visible loop:
 |   `-- loop-engineering-flow.png
 |-- scripts/
 |   `-- validate_repo.py
+|-- tests/
+|   `-- test_repository_contract.py
+|-- examples/
+|   |-- vague-idea-to-first-loop/
+|   |-- existing-project-continue/
+|   `-- invalid-loop.md
 `-- skills/
     `-- loop-engineering/
         |-- SKILL.md
@@ -133,10 +156,11 @@ Loop Engineering keeps Codex work inside a visible loop:
 
 ## Quality Gates
 
-The repository includes a local validator and smoke-testable initializer:
+The repository includes CI-compatible validation, unit tests, and a smoke-testable initializer:
 
 ```bash
 python3 scripts/validate_repo.py
+python3 -m unittest discover -s tests
 python3 -m py_compile scripts/validate_repo.py skills/loop-engineering/scripts/init_loop_project.py
 python3 skills/loop-engineering/scripts/init_loop_project.py --target /tmp/loop-engineering-smoke
 ```
@@ -146,6 +170,12 @@ Expected validation result:
 ```text
 ok
 ```
+
+For user-facing behavior examples, see:
+
+- `examples/vague-idea-to-first-loop/`
+- `examples/existing-project-continue/`
+- `examples/invalid-loop.md`
 
 ## Design Principles
 

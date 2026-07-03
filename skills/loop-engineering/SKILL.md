@@ -26,6 +26,24 @@ Choose the mode from the user's current state.
 | Existing project state | Execute loop | one bounded task, verification, state update |
 | Completed iteration | Evaluate | PASS/REJECT, failures, next loop |
 
+## Required First Output
+
+When triggered, first classify the current mode and state the loop contract before
+doing task work:
+
+```text
+mode:
+confirmed facts:
+assumptions:
+current loop:
+acceptance criteria:
+verification method:
+state files to read or write:
+```
+
+If the request is vague, ask only the questions that reduce real uncertainty. If
+the user does not answer, proceed with labeled conservative assumptions.
+
 ## Core Workflow
 
 1. **Clarify intent.** Identify goal, user, use case, inputs, outputs, risks, non-goals, and unknowns.
@@ -62,6 +80,9 @@ python3 skills/loop-engineering/scripts/init_loop_project.py --target .
 ```
 
 Adjust the path if the skill is installed elsewhere.
+
+Use `--dry-run` first when the user wants to preview files or when the target
+directory already contains important project files.
 
 ## Verification Rules
 

@@ -96,23 +96,27 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Create Loop Engineering project files.")
     parser.add_argument("--target", default=".", help="Target project directory.")
     parser.add_argument("--force", action="store_true", help="Overwrite existing files.")
+    parser.add_argument("--dry-run", action="store_true", help="Report planned files without writing.")
     args = parser.parse_args()
 
     target = Path(args.target).resolve()
-    target.mkdir(parents=True, exist_ok=True)
 
     created: list[str] = []
     skipped: list[str] = []
     for relative, content in FILES.items():
         path = target / relative
-        path.parent.mkdir(parents=True, exist_ok=True)
         if path.exists() and not args.force:
             skipped.append(relative)
             continue
+        if args.dry_run:
+            created.append(relative)
+            continue
+        path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
         created.append(relative)
 
     print(f"Target: {target}")
+    print(f"Dry run: {str(args.dry_run).lower()}")
     print(f"Created: {len(created)}")
     for item in created:
         print(f"  + {item}")
