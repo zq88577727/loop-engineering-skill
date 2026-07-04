@@ -322,6 +322,64 @@ class PublicReadyAssetTests(unittest.TestCase):
         ]:
             self.assertIn(phrase, promotion)
 
+    def test_portable_prompt_pack_supports_non_codex_ai_tools(self) -> None:
+        required = [
+            "portable/README.md",
+            "portable/LOOP_ENGINEERING_PROMPT.md",
+            "portable/LOOP_ENGINEERING_PROMPT.zh.md",
+            "portable/AGENTS_TEMPLATE.md",
+            "portable/STATE_TEMPLATE/triage.md",
+            "portable/STATE_TEMPLATE/decisions.md",
+            "portable/STATE_TEMPLATE/failures.md",
+            "portable/STATE_TEMPLATE/inbox.md",
+            "portable/STATE_TEMPLATE/next.md",
+            "portable/examples/vague-idea.md",
+            "portable/examples/existing-project.md",
+        ]
+
+        missing = [path for path in required if not (ROOT / path).is_file()]
+
+        self.assertEqual(missing, [])
+
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        for phrase in [
+            "Portable Prompt Pack",
+            "portable/README.md",
+            "Cursor",
+            "Claude Code",
+            "Gemini CLI",
+            "ChatGPT",
+        ]:
+            self.assertIn(phrase, readme)
+
+        portable_readme = (ROOT / "portable/README.md").read_text(encoding="utf-8")
+        for phrase in [
+            "No Codex required",
+            "Cursor",
+            "Claude Code",
+            "Gemini CLI",
+            "ChatGPT",
+            "copy",
+            "STATE_TEMPLATE",
+            "PASS criteria",
+        ]:
+            self.assertIn(phrase, portable_readme)
+
+        prompt = (ROOT / "portable/LOOP_ENGINEERING_PROMPT.md").read_text(
+            encoding="utf-8"
+        )
+        for phrase in [
+            "Do not implement immediately",
+            "Clarify",
+            "Define",
+            "First loop",
+            "Verify",
+            "Persist state",
+            "state/next.md",
+            "PASS or REJECT",
+        ]:
+            self.assertIn(phrase, prompt)
+
     def test_live_eval_dry_run_uses_codex_exec_sandbox(self) -> None:
         result = subprocess.run(
             [PYTHON, "evals/run_live_eval.py", "--dry-run"],

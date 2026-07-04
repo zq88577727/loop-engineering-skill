@@ -2,15 +2,15 @@
 
 # Loop Engineering Skill
 
-**A Codex skill for turning vague ideas into bounded, verified project loops.**
+**A workflow pack for turning vague ideas into bounded, verified project loops.**
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827)](skills/loop-engineering/SKILL.md)
 [![Verified](https://img.shields.io/badge/v0.3.1-public%20ready-16a34a)](#quality-gates)
 [![GitHub stars](https://img.shields.io/github/stars/zq88577727/loop-engineering-skill?style=social)](https://github.com/zq88577727/loop-engineering-skill/stargazers)
 
-Turn unclear intent into a loop that clarifies, defines, executes, verifies,
-persists state, and continues with durable progress.
+Use it as a Codex skill, or copy the Portable Prompt Pack into Cursor, Claude
+Code, Gemini CLI, ChatGPT, and other AI coding tools.
 
 ![Loop Engineering flow](assets/loop-engineering-flow.png)
 
@@ -18,7 +18,8 @@ persists state, and continues with durable progress.
 
 ## 30-second demo
 
-Install the skill, restart Codex, then start a new project with one rough idea:
+Codex users can install the skill, restart Codex, then start a new project with
+one rough idea:
 
 ```text
 Use Loop Engineering for this vague idea: I want a small browser extension for saving useful snippets, but I do not know the exact requirements yet. Do not implement yet.
@@ -28,6 +29,10 @@ Expected result: Codex should clarify the idea, define a first loop, create or
 propose `state/triage.md`, `state/decisions.md`, `state/inbox.md`, and
 `state/next.md`, then stop before premature implementation. See the complete
 walkthrough in [`docs/SHOWCASE.md`](docs/SHOWCASE.md).
+
+Not using Codex? Open [`portable/README.md`](portable/README.md), copy the
+Portable Prompt Pack, and use the same workflow in Cursor, Claude Code, Gemini
+CLI, ChatGPT, or any assistant that can read project files.
 
 ## Use this when
 
@@ -50,9 +55,13 @@ Loop Engineering is a practical workflow pattern for Codex-assisted work:
 idea -> clarify -> define -> first loop -> execute -> verify -> persist state -> continue
 ```
 
-This repository packages that pattern as an installable Codex skill. It is
-designed for users who start with a rough project idea, a stalled build, or a
-long-running task that needs structure before implementation.
+This repository packages that pattern in two forms:
+
+- A Codex skill for automatic discovery inside Codex.
+- A Portable Prompt Pack for AI coding tools that do not load Codex skills.
+
+It is designed for users who start with a rough project idea, a stalled build,
+or a long-running task that needs structure before implementation.
 
 ## Why Use It
 
@@ -113,6 +122,30 @@ Use Loop Engineering for this vague idea.
 ```text
 帮我把这个模糊想法变成 first loop，不要马上实现。
 ```
+
+## Portable Prompt Pack
+
+Use this when you are not using Codex, or when your AI tool cannot install Codex
+skills.
+
+```text
+portable/README.md
+portable/LOOP_ENGINEERING_PROMPT.md
+portable/LOOP_ENGINEERING_PROMPT.zh.md
+portable/AGENTS_TEMPLATE.md
+portable/STATE_TEMPLATE/
+```
+
+Basic path:
+
+1. Copy `portable/LOOP_ENGINEERING_PROMPT.md` or
+   `portable/LOOP_ENGINEERING_PROMPT.zh.md` into your AI coding tool.
+2. Copy `portable/STATE_TEMPLATE/` into your project as `state/`.
+3. Ask the assistant to read `state/next.md`, execute one bounded loop, verify,
+   and update state.
+
+This path is intended for Cursor, Claude Code, Gemini CLI, ChatGPT, JetBrains AI,
+and similar tools. It is manual, but it does not require Codex.
 
 ## 中文快速开始
 
@@ -194,6 +227,13 @@ Loop Engineering keeps Codex work inside a visible loop:
 |-- docs/
 |   |-- PROMOTION.md
 |   `-- SHOWCASE.md
+|-- portable/
+|   |-- README.md
+|   |-- LOOP_ENGINEERING_PROMPT.md
+|   |-- LOOP_ENGINEERING_PROMPT.zh.md
+|   |-- AGENTS_TEMPLATE.md
+|   |-- STATE_TEMPLATE/
+|   `-- examples/
 |-- tests/
 |   `-- test_repository_contract.py
 |-- examples/
