@@ -1,0 +1,38 @@
+name: Usage feedback
+description: Share how Loop Engineering behaved in a real Codex session.
+title: "[Feedback]: "
+labels: ["feedback"]
+body:
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Scenario
+      description: What were you trying to do?
+    validations:
+      required: true
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Prompt used
+      description: Paste the exact prompt if it is safe to share.
+    validations:
+      required: true
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Outcome
+      options:
+        - Clarified and created useful state
+        - Continued correctly from existing state
+        - Implemented too early
+        - Missed verification
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Suggested improvement
+      description: What would have made the workflow easier or more reliable?
+    validations:
+      required: false

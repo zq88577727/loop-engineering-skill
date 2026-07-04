@@ -12,8 +12,13 @@ from pathlib import Path
 REQUIRED_FILES = [
     "README.md",
     "LICENSE",
+    "CONTRIBUTING.md",
     ".github/workflows/validate.yml",
     ".github/workflows/live-eval.yml",
+    ".github/ISSUE_TEMPLATE/bug_report.yml",
+    ".github/ISSUE_TEMPLATE/usage_feedback.yml",
+    "docs/SHOWCASE.md",
+    "docs/PROMOTION.md",
     "docs/releases/v0.2.0.md",
     "docs/releases/v0.2.1.md",
     "docs/releases/v0.3.0.md",
@@ -74,6 +79,12 @@ README_REQUIRED_PHRASES = [
     "OPENAI_API_KEY",
     "--models default,gpt-5.5",
     "evals/reports/failures/*.json",
+    "30-second demo",
+    "中文快速开始",
+    "docs/SHOWCASE.md",
+    "CONTRIBUTING.md",
+    "Use this when",
+    "Do not use this when",
 ]
 
 CI_REQUIRED_PHRASES = [

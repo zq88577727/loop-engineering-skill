@@ -1,0 +1,38 @@
+name: Bug report
+description: Report an install, validation, or behavior bug.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What failed?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Skill version
+      placeholder: v0.3.1
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Include install command, prompt, and commands run.
+      placeholder: |
+        1. Installed with ...
+        2. Prompted Codex with ...
+        3. Expected ...
+        4. Observed ...
+    validations:
+      required: true
+  - type: textarea
+    id: state-files
+    attributes:
+      label: Relevant state files
+      description: Paste non-sensitive snippets from state/ or docs/.
+    validations:
+      required: false

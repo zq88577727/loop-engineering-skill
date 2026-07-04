@@ -279,6 +279,49 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertIn('"login"', live_script)
         self.assertIn('"status"', live_script)
 
+    def test_repository_has_exposure_basics_for_new_users(self) -> None:
+        required = [
+            "docs/SHOWCASE.md",
+            "docs/PROMOTION.md",
+            "CONTRIBUTING.md",
+            ".github/ISSUE_TEMPLATE/bug_report.yml",
+            ".github/ISSUE_TEMPLATE/usage_feedback.yml",
+        ]
+
+        missing = [path for path in required if not (ROOT / path).is_file()]
+
+        self.assertEqual(missing, [])
+
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        for phrase in [
+            "30-second demo",
+            "中文快速开始",
+            "docs/SHOWCASE.md",
+            "CONTRIBUTING.md",
+            "Use this when",
+            "Do not use this when",
+        ]:
+            self.assertIn(phrase, readme)
+
+        showcase = (ROOT / "docs/SHOWCASE.md").read_text(encoding="utf-8")
+        for phrase in [
+            "Vague idea",
+            "Install",
+            "Run",
+            "Expected state files",
+            "PASS criteria",
+        ]:
+            self.assertIn(phrase, showcase)
+
+        promotion = (ROOT / "docs/PROMOTION.md").read_text(encoding="utf-8")
+        for phrase in [
+            "GitHub About",
+            "Suggested topics",
+            "Launch post",
+            "30-second demo script",
+        ]:
+            self.assertIn(phrase, promotion)
+
     def test_live_eval_dry_run_uses_codex_exec_sandbox(self) -> None:
         result = subprocess.run(
             [PYTHON, "evals/run_live_eval.py", "--dry-run"],

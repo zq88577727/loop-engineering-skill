@@ -16,6 +16,32 @@ persists state, and continues with durable progress.
 
 </div>
 
+## 30-second demo
+
+Install the skill, restart Codex, then start a new project with one rough idea:
+
+```text
+Use Loop Engineering for this vague idea: I want a small browser extension for saving useful snippets, but I do not know the exact requirements yet. Do not implement yet.
+```
+
+Expected result: Codex should clarify the idea, define a first loop, create or
+propose `state/triage.md`, `state/decisions.md`, `state/inbox.md`, and
+`state/next.md`, then stop before premature implementation. See the complete
+walkthrough in [`docs/SHOWCASE.md`](docs/SHOWCASE.md).
+
+## Use this when
+
+- You have a vague idea and need Codex to turn it into a bounded first loop.
+- You are continuing an existing project and want Codex to follow `state/next.md`.
+- You want every iteration to end with explicit verification and durable state.
+
+## Do not use this when
+
+- The task is already tiny, deterministic, and ready for direct implementation.
+- You only need a one-off answer with no future project state.
+- You want a full project management framework instead of a lightweight Codex
+  workflow guardrail.
+
 ## What This Is
 
 Loop Engineering is a practical workflow pattern for Codex-assisted work:
@@ -88,6 +114,32 @@ Use Loop Engineering for this vague idea.
 帮我把这个模糊想法变成 first loop，不要马上实现。
 ```
 
+## 中文快速开始
+
+安装后重启 Codex。第一次进入新项目时，用这一句就够：
+
+```text
+用 Loop Engineering 初始化这个项目：先读当前文件，建立 state，拆出第一个可验证 loop，不要直接实现。
+```
+
+以后继续同一个项目，不需要每次背完整 prompt：
+
+```text
+按 state/next.md 继续，只做一个 loop，验证后更新 state。
+```
+
+如果上下文已经乱了，用这句重新对齐：
+
+```text
+用 Loop Engineering 重新对齐：先读 README、AGENTS 和 state，再复述当前 loop。
+```
+
+更多外部展示、安装复现和传播材料见：
+
+- [`docs/SHOWCASE.md`](docs/SHOWCASE.md)
+- [`docs/PROMOTION.md`](docs/PROMOTION.md)
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
+
 ## Initialize A Project
 
 After the skill is available in a workspace:
@@ -139,6 +191,9 @@ Loop Engineering keeps Codex work inside a visible loop:
 |   `-- loop-engineering-flow.png
 |-- scripts/
 |   `-- validate_repo.py
+|-- docs/
+|   |-- PROMOTION.md
+|   `-- SHOWCASE.md
 |-- tests/
 |   `-- test_repository_contract.py
 |-- examples/
