@@ -6,7 +6,7 @@
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827)](skills/loop-engineering/SKILL.md)
-[![Verified](https://img.shields.io/badge/v0.3.0-public%20ready-16a34a)](#quality-gates)
+[![Verified](https://img.shields.io/badge/v0.3.1-public%20ready-16a34a)](#quality-gates)
 [![GitHub stars](https://img.shields.io/github/stars/zq88577727/loop-engineering-skill?style=social)](https://github.com/zq88577727/loop-engineering-skill/stargazers)
 
 Turn unclear intent into a loop that clarifies, defines, executes, verifies,
@@ -54,13 +54,13 @@ Install from GitHub:
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo zq88577727/loop-engineering-skill \
-  --ref v0.3.0 \
+  --ref v0.3.1 \
   --path skills/loop-engineering
 ```
 
 Restart Codex after installation so the skill is discoverable.
 
-Recommended stable baseline: `v0.3.0`. Omit `--ref v0.3.0` only when you
+Recommended stable baseline: `v0.3.1`. Omit `--ref v0.3.1` only when you
 intentionally want the latest `main` branch version.
 
 After restart, verify activation with a natural prompt:
