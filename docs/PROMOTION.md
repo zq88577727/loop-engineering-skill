@@ -1,20 +1,20 @@
 # Promotion Kit
 
 Use this page when presenting the project outside the repository. It keeps the
-public description accurate and avoids overstating what the skill does.
+public description accurate and avoids overstating what the workflow pack does.
 
 ## GitHub About
 
 Description:
 
 ```text
-Codex skill for turning vague ideas into bounded, verified project loops with durable state.
+Workflow pack for turning vague ideas into bounded, verified AI coding loops with durable state.
 ```
 
 Website:
 
 ```text
-https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.3.1
+https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.4.0
 ```
 
 ## Suggested topics
@@ -28,6 +28,8 @@ developer-tools
 state-management
 software-engineering
 workflow-automation
+prompt-engineering
+ai-coding
 ```
 
 ## Launch post
@@ -35,34 +37,39 @@ workflow-automation
 Short English version:
 
 ```text
-I released Loop Engineering Skill v0.3.1, a Codex skill for turning vague ideas
-into bounded, verified project loops.
+I released Loop Engineering v0.4.0, a workflow pack for turning vague ideas into
+bounded, verified AI coding loops.
 
-It helps Codex clarify the idea, define the first loop, persist state, verify
-the result, and continue from state/next.md instead of relying on chat memory.
+Codex users can install it as a skill. Cursor, Claude Code, Gemini CLI, ChatGPT,
+JetBrains AI, and other AI coding tools can use the Portable Prompt Pack.
 
-Install:
+Codex install:
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo zq88577727/loop-engineering-skill \
-  --ref v0.3.1 \
+  --ref v0.4.0 \
   --path skills/loop-engineering
+
+Portable path:
+copy portable/LOOP_ENGINEERING_PROMPT.md and portable/STATE_TEMPLATE/ into your project.
 ```
 
 Short Chinese version:
 
 ```text
-我发布了 Loop Engineering Skill v0.3.1。它不是让 Codex 更快写代码，而是让
-Codex 在模糊想法、长期任务、已有项目继续推进时，先澄清目标，拆出一个可验收
-loop，写入 state 文件，再执行和验证。
+我发布了 Loop Engineering v0.4.0。它现在不只是 Codex skill，而是一个可复用的
+AI 编程 workflow pack：把模糊想法、长期任务、已有项目继续推进，收束成一个
+可验收 loop，并把决策、失败、下一步写入 state 文件。
 
-适合场景：你不想每次都靠聊天记录续上下文，而是希望项目有 state/next.md、
-state/decisions.md、docs/acceptance.md 这类可复用入口。
+Codex 用户可以安装 skill；Cursor、Claude Code、Gemini CLI、ChatGPT、JetBrains
+AI 用户可以直接复制 Portable Prompt Pack 使用。
 ```
 
 ## 30-second demo script
 
+Codex path:
+
 ```text
-1. Install the skill from the pinned v0.3.1 tag.
+1. Install the skill from the pinned v0.4.0 tag.
 2. Restart Codex.
 3. Open a new empty project.
 4. Prompt: "Use Loop Engineering for this vague idea: I want a small browser
@@ -72,12 +79,22 @@ state/decisions.md、docs/acceptance.md 这类可复用入口。
 6. Continue with: "按 state/next.md 继续，只做一个 loop，验证后更新 state。"
 ```
 
+Portable path:
+
+```text
+1. Open portable/README.md.
+2. Copy portable/LOOP_ENGINEERING_PROMPT.md or portable/LOOP_ENGINEERING_PROMPT.zh.md.
+3. Copy portable/STATE_TEMPLATE/ into the project as state/.
+4. Prompt the AI coding tool to run one bounded loop and update state.
+```
+
 ## Positioning notes
 
 Say:
 
-- "A lightweight Codex workflow skill."
-- "Best for vague ideas, stalled projects, and long-running tasks."
+- "A lightweight AI coding workflow pack."
+- "Codex skill plus Portable Prompt Pack."
+- "Best for vague ideas, stalled projects, and long-running AI coding tasks."
 - "Persists decisions, failures, acceptance criteria, and the next loop."
 
 Avoid saying:

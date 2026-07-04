@@ -176,7 +176,7 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertIn("python3 -m unittest discover -s tests", text)
 
     def test_release_and_forward_test_artifacts_exist(self) -> None:
-        release_notes = ROOT / "docs/releases/v0.3.1.md"
+        release_notes = ROOT / "docs/releases/v0.4.0.md"
         clarify_forward_test = ROOT / "examples/forward-test-report.md"
         existing_forward_test = ROOT / "examples/forward-test-existing-project.md"
         premature_forward_test = ROOT / "examples/forward-test-premature-implementation.md"
@@ -188,14 +188,17 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertTrue(existing_forward_test.is_file())
         self.assertTrue(premature_forward_test.is_file())
         self.assertTrue(release_script.is_file())
-        self.assertIn("--ref v0.3.1", readme)
+        self.assertIn("--ref v0.4.0", readme)
+        self.assertIn("Recommended stable baseline: `v0.4.0`", readme)
         release_text = release_notes.read_text(encoding="utf-8")
         self.assertIn("Release Page Status", release_text)
         self.assertIn("GitHub Release page", release_text)
         self.assertIn(
-            "https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.3.1",
+            "https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.4.0",
             release_text,
         )
+        self.assertIn("Portable Prompt Pack", release_text)
+        self.assertIn("workflow pack", release_text)
         self.assertIn("Published:", release_text)
         self.assertIn("PASS", clarify_forward_test.read_text(encoding="utf-8"))
         self.assertIn("PASS", existing_forward_test.read_text(encoding="utf-8"))
@@ -207,7 +210,7 @@ class PublicReadyAssetTests(unittest.TestCase):
                 PYTHON,
                 "scripts/create_github_release.py",
                 "--tag",
-                "v0.3.1",
+                "v0.4.0",
                 "--dry-run",
             ],
             cwd=ROOT,
@@ -219,9 +222,24 @@ class PublicReadyAssetTests(unittest.TestCase):
         payload = json.loads(result.stdout)
 
         self.assertEqual(payload["status"], "dry-run")
-        self.assertEqual(payload["tag"], "v0.3.1")
-        self.assertEqual(payload["notes_file"], "docs/releases/v0.3.1.md")
-        self.assertIn("gh release create v0.3.1", payload["command"])
+        self.assertEqual(payload["tag"], "v0.4.0")
+        self.assertEqual(payload["notes_file"], "docs/releases/v0.4.0.md")
+        self.assertIn("gh release create v0.4.0", payload["command"])
+
+    def test_release_script_defaults_to_current_stable_release(self) -> None:
+        result = subprocess.run(
+            [PYTHON, "scripts/create_github_release.py", "--dry-run"],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+
+        payload = json.loads(result.stdout)
+
+        self.assertEqual(payload["tag"], "v0.4.0")
+        self.assertEqual(payload["title"], "v0.4.0 workflow pack with portable prompts")
+        self.assertEqual(payload["notes_file"], "docs/releases/v0.4.0.md")
 
     def test_automated_behavior_eval_assets_exist(self) -> None:
         required = [
@@ -319,6 +337,12 @@ class PublicReadyAssetTests(unittest.TestCase):
             "Suggested topics",
             "Launch post",
             "30-second demo script",
+            "workflow pack",
+            "Portable Prompt Pack",
+            "Cursor",
+            "Claude Code",
+            "Gemini CLI",
+            "ChatGPT",
         ]:
             self.assertIn(phrase, promotion)
 
@@ -379,6 +403,15 @@ class PublicReadyAssetTests(unittest.TestCase):
             "PASS or REJECT",
         ]:
             self.assertIn(phrase, prompt)
+
+        showcase = (ROOT / "docs/SHOWCASE.md").read_text(encoding="utf-8")
+        for phrase in [
+            "Portable demo",
+            "portable/LOOP_ENGINEERING_PROMPT.md",
+            "portable/STATE_TEMPLATE",
+            "No Codex required",
+        ]:
+            self.assertIn(phrase, showcase)
 
     def test_live_eval_dry_run_uses_codex_exec_sandbox(self) -> None:
         result = subprocess.run(

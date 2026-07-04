@@ -10,18 +10,20 @@ I want a small browser extension for saving useful snippets, but I do not know
 the exact requirements yet.
 ```
 
-## Install
+## Codex demo
+
+### Install
 
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo zq88577727/loop-engineering-skill \
-  --ref v0.3.1 \
+  --ref v0.4.0 \
   --path skills/loop-engineering
 ```
 
 Restart Codex after installation.
 
-## Run
+### Run
 
 Open a new Codex session in the target project and send:
 
@@ -33,6 +35,25 @@ implement yet.
 
 Codex should not start coding immediately. It should first clarify the problem,
 define a bounded first loop, and create or propose state files.
+
+## Portable demo
+
+No Codex required. Use this path for Cursor, Claude Code, Gemini CLI, ChatGPT,
+JetBrains AI, or any assistant that can read project files.
+
+1. Copy `portable/LOOP_ENGINEERING_PROMPT.md` or
+   `portable/LOOP_ENGINEERING_PROMPT.zh.md` into the AI coding tool.
+2. Copy `portable/STATE_TEMPLATE/` into the project as `state/`.
+3. Send this prompt:
+
+```text
+Use the Loop Engineering portable workflow. Read the project files, create or
+update state from portable/STATE_TEMPLATE, define one first loop, and do not
+implement immediately.
+```
+
+The expected behavior is the same as the Codex demo: clarify first, define one
+bounded loop, create or update state, and avoid premature implementation.
 
 ## Expected state files
 
