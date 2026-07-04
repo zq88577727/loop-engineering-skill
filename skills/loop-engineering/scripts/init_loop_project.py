@@ -20,16 +20,36 @@ Use Loop Engineering: read state files, execute one bounded loop, verify, update
 """,
     "AGENTS.md": """# Agent Instructions
 
-Use Loop Engineering for this project.
+Use Loop Engineering for this project. Treat this file as the short router, not
+as the full project manual.
 
-1. Read state before acting.
-2. Restate goal, non-goals, and current loop scope.
-3. Execute one bounded task.
-4. Verify independently.
-5. Update state files.
-6. Write the next-loop entry.
+## Run It
 
-Do not expand scope without writing the decision to state/inbox.md or state/decisions.md.
+- Fill in the project setup or run command here.
+
+## Verify It
+
+- Fill in the project validation command here.
+- If no automated check exists yet, update docs/acceptance.md with manual checks.
+
+## Hard Constraints
+
+- Read state before acting.
+- Restate the goal, non-goals, and current loop scope.
+- Execute one bounded loop only.
+- Verify independently before reporting PASS.
+- Update state files before stopping.
+- Do not expand scope without recording the decision.
+
+## Where To Look
+
+- Current loop -> state/next.md
+- Current status and priorities -> state/triage.md
+- Accepted assumptions and decisions -> state/decisions.md
+- Failures and prevention notes -> state/failures.md
+- Human questions -> state/inbox.md
+- Acceptance criteria -> docs/acceptance.md
+- Architecture and boundaries -> docs/architecture.md
 """,
     "docs/acceptance.md": """# Acceptance Criteria
 

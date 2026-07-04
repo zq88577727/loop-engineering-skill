@@ -113,6 +113,34 @@ class RepositoryContractTests(unittest.TestCase):
             self.assertIn("Dry run: true", result.stdout)
             self.assertFalse(target.exists())
 
+    def test_initializer_agents_file_is_short_router_with_verification(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+
+            self.run_cmd(
+                PYTHON,
+                "skills/loop-engineering/scripts/init_loop_project.py",
+                "--target",
+                str(target),
+            )
+
+            agents = (target / "AGENTS.md").read_text(encoding="utf-8")
+
+        for heading in ["## Run It", "## Verify It", "## Hard Constraints", "## Where To Look"]:
+            self.assertIn(heading, agents)
+        for route in [
+            "state/next.md",
+            "state/triage.md",
+            "state/decisions.md",
+            "state/failures.md",
+            "state/inbox.md",
+            "docs/acceptance.md",
+            "docs/architecture.md",
+        ]:
+            self.assertIn(route, agents)
+        self.assertIn("Execute one bounded loop only", agents)
+        self.assertLessEqual(len(agents.splitlines()), 80)
+
 
 class PublicReadyAssetTests(unittest.TestCase):
     def test_examples_cover_new_user_and_existing_project_paths(self) -> None:
