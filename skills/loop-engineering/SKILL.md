@@ -55,6 +55,22 @@ they directly unblock the user-visible demo or business acceptance. If a loop
 only improves internal machinery, explain how it moves the project closer to
 the demo within the remaining loop budget.
 
+## Execution Strategy
+
+Before executing a loop, choose the execution strategy before executing the loop:
+
+- `Single-agent`: use for small, sequential, or coherence-sensitive work.
+- `Subagent parallelization`: use when there are 2+ independent workstreams
+  that can proceed without shared-state conflict.
+- `Subagent review`: use for critical behavior, release, CI, eval, public docs,
+  validators, or user-facing output that needs independent review.
+- `No subagent`: use when the goal is unclear, acceptance is undefined, or the
+  project needs convergence before expansion.
+
+Default to `Single-agent`. Use subagents only when they reduce risk, shorten
+independent work, or improve verification. Do not ask the user at every step;
+record the chosen strategy in the loop contract and proceed.
+
 ## Required First Output
 
 When triggered, first classify the current mode and state the loop contract before
@@ -67,6 +83,7 @@ assumptions:
 user-visible demo:
 business acceptance:
 loop budget:
+execution strategy:
 current loop:
 acceptance criteria:
 verification method:
@@ -84,10 +101,12 @@ the user does not answer, proceed with labeled conservative assumptions.
 3. **Define versions.** Split the work into MVP, practical version, and long-term system.
 4. **Select the first loop.** Choose the smallest loop that can produce evidence.
 5. **Create state.** Use `state/triage.md`, `state/decisions.md`, `state/failures.md`, `state/inbox.md`, and `state/next.md`.
-6. **Execute one bounded task.** Do not expand scope during the loop.
-7. **Verify independently.** Switch to evaluator posture. Default to REJECT until evidence supports PASS.
-8. **Persist outcomes.** Record completed work, decisions, failures, blockers, and the next loop entry.
-9. **Converge.** Track the remaining loop budget and force a demo/ship/stop
+6. **Choose execution strategy.** Decide single-agent, subagent parallelization,
+   subagent review, or no subagent before execution.
+7. **Execute one bounded task.** Do not expand scope during the loop.
+8. **Verify independently.** Switch to evaluator posture. Default to REJECT until evidence supports PASS.
+9. **Persist outcomes.** Record completed work, decisions, failures, blockers, and the next loop entry.
+10. **Converge.** Track the remaining loop budget and force a demo/ship/stop
    decision instead of endlessly generating `state/next.md`.
 
 For the complete 17-step method, read `references/full-workflow.md`.
@@ -139,6 +158,8 @@ Evaluator posture:
 - Recording temporary reasoning instead of durable decisions.
 - Passing internal tests while failing the business acceptance.
 - Extending harness work after the loop budget is exhausted.
+- Asking the user to manually decide subagent usage every loop instead of using
+  the Execution Strategy rules.
 
 ## Useful Prompts
 

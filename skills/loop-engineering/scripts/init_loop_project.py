@@ -39,6 +39,15 @@ as the full project manual.
 - Set a loop budget, default 3 loops.
 - At the ship/stop gate, demo, ship, or REJECT instead of creating endless next work.
 
+## Execution Strategy
+
+- Before each loop, choose the execution strategy before executing the loop.
+- Single-agent: small, sequential, or coherence-sensitive work.
+- Subagent parallelization: 2+ independent workstreams without shared-state conflict.
+- Subagent review: critical behavior, release, CI, eval, public docs, validators, or user-facing output.
+- No subagent: unclear goal, undefined acceptance, or convergence needed before expansion.
+- Default to Single-agent unless subagents reduce risk, shorten independent work, or improve verification.
+
 ## Hard Constraints
 
 - Read state before acting.

@@ -187,6 +187,23 @@ Loop 2: replace fake data with the smallest real input-output path
 Loop 3: run business acceptance and decide ship/stop
 ```
 
+## 6B. Execution Strategy
+
+Before execution, choose the execution strategy before executing the loop.
+Record the choice in the loop contract instead of asking the user to decide at
+every step.
+
+- `Single-agent`: small, sequential, or coherence-sensitive work.
+- `Subagent parallelization`: 2+ independent workstreams that do not conflict
+  on shared state.
+- `Subagent review`: critical behavior, release, CI, eval, public docs,
+  validators, or user-facing output that needs independent review.
+- `No subagent`: unclear goal, undefined acceptance, or a project that needs
+  convergence before expansion.
+
+Default to `Single-agent`. Use subagents only when they reduce risk, shorten
+independent work, or improve verification.
+
 Prompt:
 
 ```text

@@ -10,9 +10,10 @@ long-running tasks, and existing projects with `state/next.md`.
 3. Define the Project Outcome Mode: user-visible demo, business acceptance,
    loop budget, and ship/stop gate.
 4. Choose one bounded loop that moves toward the demo.
-5. Execute only that loop.
-6. Verify the result against business acceptance, not only internal tests.
-7. Update state before ending.
+5. Choose the execution strategy before executing the loop.
+6. Execute only that loop.
+7. Verify the result against business acceptance, not only internal tests.
+8. Update state before ending.
 
 ## Project Outcome Mode
 
@@ -23,6 +24,20 @@ For product, tool, demo, research-harness, or user-facing workflow work:
 - Set a loop budget, default 3 loops.
 - Enforce a ship/stop gate when the budget is exhausted.
 - Do not add more harness unless it directly unblocks the demo.
+
+## Execution Strategy
+
+Always choose the execution strategy before executing the loop.
+
+Before executing a loop, choose one:
+
+- Single-agent: small, sequential, or coherence-sensitive work.
+- Subagent parallelization: 2+ independent workstreams without shared-state conflict.
+- Subagent review: critical behavior, release, CI, eval, public docs, validators, or user-facing output.
+- No subagent: unclear goal, undefined acceptance, or convergence needed before expansion.
+
+Default to Single-agent. Use subagents only when they reduce risk, shorten
+independent work, or improve verification.
 
 ## Verify It
 

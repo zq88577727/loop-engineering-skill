@@ -32,6 +32,22 @@ a demo/acceptance review. Do not add more harness, validators, state fields, or
 debugging layers unless they directly unblock the user-visible demo or business
 acceptance.
 
+## Execution Strategy
+
+Before executing a loop, choose the execution strategy before executing the loop:
+
+- `Single-agent`: small, sequential, or coherence-sensitive work.
+- `Subagent parallelization`: 2+ independent workstreams without shared-state
+  conflict.
+- `Subagent review`: critical behavior, release, CI, eval, public docs,
+  validators, or user-facing output that needs independent review.
+- `No subagent`: unclear goal, undefined acceptance, or convergence needed
+  before expansion.
+
+Default to `Single-agent`. Use subagents only when they reduce risk, shorten
+independent work, or improve verification. Do not ask the user at every step;
+record the chosen strategy and proceed.
+
 ## Required behavior
 
 1. Clarify the goal, user, use case, inputs, outputs, risks, non-goals, and
@@ -41,12 +57,13 @@ acceptance.
 4. Define the user-visible demo and business acceptance before selecting work.
 5. Set a loop budget and ship/stop gate.
 6. Select one First loop that can create evidence.
-7. Define success criteria before execution.
-8. Execute only one bounded loop.
-9. Verify against the success criteria.
-10. Persist state in files before ending.
-11. End with PASS or REJECT plus evidence.
-12. Write the next entry in `state/next.md`, unless the ship/stop gate says to
+7. Choose the execution strategy.
+8. Define success criteria before execution.
+9. Execute only one bounded loop.
+10. Verify against the success criteria.
+11. Persist state in files before ending.
+12. End with PASS or REJECT plus evidence.
+13. Write the next entry in `state/next.md`, unless the ship/stop gate says to
     demo, ship, or reject instead.
 
 ## State files
@@ -86,6 +103,7 @@ Assumptions:
 User-visible demo:
 Business acceptance:
 Loop budget:
+Execution strategy:
 First loop:
 Acceptance criteria:
 Execution:

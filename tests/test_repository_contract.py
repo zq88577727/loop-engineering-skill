@@ -163,6 +163,29 @@ class RepositoryContractTests(unittest.TestCase):
         ]:
             self.assertIn(phrase, agents)
 
+    def test_initializer_agents_file_includes_execution_strategy_router(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+
+            self.run_cmd(
+                PYTHON,
+                "skills/loop-engineering/scripts/init_loop_project.py",
+                "--target",
+                str(target),
+            )
+
+            agents = (target / "AGENTS.md").read_text(encoding="utf-8")
+
+        for phrase in [
+            "## Execution Strategy",
+            "Single-agent",
+            "Subagent parallelization",
+            "Subagent review",
+            "No subagent",
+            "choose the execution strategy before executing the loop",
+        ]:
+            self.assertIn(phrase, agents)
+
 
 class PublicReadyAssetTests(unittest.TestCase):
     def test_examples_cover_new_user_and_existing_project_paths(self) -> None:
@@ -467,6 +490,42 @@ class PublicReadyAssetTests(unittest.TestCase):
             "loop 上限",
             "业务验收",
             "停止继续补 harness",
+        ]:
+            self.assertIn(phrase, portable_prompt_zh)
+
+    def test_execution_strategy_routes_subagents_without_user_prompting_every_step(self) -> None:
+        skill = (ROOT / "skills/loop-engineering/SKILL.md").read_text(encoding="utf-8")
+        full_workflow = (
+            ROOT / "skills/loop-engineering/references/full-workflow.md"
+        ).read_text(encoding="utf-8")
+        portable_prompt = (ROOT / "portable/LOOP_ENGINEERING_PROMPT.md").read_text(
+            encoding="utf-8"
+        )
+        portable_prompt_zh = (
+            ROOT / "portable/LOOP_ENGINEERING_PROMPT.zh.md"
+        ).read_text(encoding="utf-8")
+        portable_agents = (ROOT / "portable/AGENTS_TEMPLATE.md").read_text(
+            encoding="utf-8"
+        )
+
+        for text in [skill, full_workflow, portable_prompt, portable_agents]:
+            for phrase in [
+                "Execution Strategy",
+                "Single-agent",
+                "Subagent parallelization",
+                "Subagent review",
+                "No subagent",
+                "choose the execution strategy before executing the loop",
+            ]:
+                self.assertIn(phrase, text)
+
+        for phrase in [
+            "执行策略",
+            "单 agent",
+            "子 agent 并行",
+            "子 agent 审查",
+            "不使用子 agent",
+            "执行 loop 前先选择执行策略",
         ]:
             self.assertIn(phrase, portable_prompt_zh)
 
