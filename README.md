@@ -6,7 +6,7 @@
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827)](skills/loop-engineering/SKILL.md)
-[![Verified](https://img.shields.io/badge/v0.4.0-workflow%20pack-16a34a)](#quality-gates)
+[![Verified](https://img.shields.io/badge/v0.4.1-workflow%20pack-16a34a)](#quality-gates)
 [![GitHub stars](https://img.shields.io/github/stars/zq88577727/loop-engineering-skill?style=social)](https://github.com/zq88577727/loop-engineering-skill/stargazers)
 
 Use it as a Codex skill, or copy the Portable Prompt Pack into Cursor, Claude
@@ -90,13 +90,13 @@ Install from GitHub:
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo zq88577727/loop-engineering-skill \
-  --ref v0.4.0 \
+  --ref v0.4.1 \
   --path skills/loop-engineering
 ```
 
 Restart Codex after installation so the skill is discoverable.
 
-Recommended stable baseline: `v0.4.0`. Omit `--ref v0.4.0` only when you
+Recommended stable baseline: `v0.4.1`. Omit `--ref v0.4.1` only when you
 intentionally want the latest `main` branch version.
 
 After restart, verify activation with a natural prompt:

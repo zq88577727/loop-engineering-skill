@@ -11,8 +11,8 @@ from pathlib import Path
 
 
 DEFAULT_REPO = "zq88577727/loop-engineering-skill"
-DEFAULT_TAG = "v0.4.0"
-DEFAULT_TITLE = "v0.4.0 workflow pack with portable prompts"
+DEFAULT_TAG = "v0.4.1"
+DEFAULT_TITLE = "v0.4.1 outcome-gated continuation guidance"
 
 
 def build_command(repo: str, tag: str, title: str, notes_file: str) -> list[str]:
