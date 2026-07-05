@@ -138,6 +138,55 @@ The first loop should answer:
 - What is the largest uncertainty?
 - What should the next loop do?
 
+## 6A. Project Outcome Mode
+
+Use Project Outcome Mode for product, tool, demo, research-harness, or
+user-facing workflow builds. The goal is project convergence, not an endless
+sequence of internally valid loops.
+
+Before implementation, define:
+
+```markdown
+## User-visible demo
+
+## Business acceptance
+
+## Loop budget
+
+## Ship/stop gate
+```
+
+Default rule:
+
+- `user-visible demo`: the smallest artifact a user can try, inspect, or react
+  to.
+- `business acceptance`: the real user outcome, not just schema validity,
+  JSON fields, state updates, tests, or validator success.
+- `loop budget`: at most 3 loops before demo/acceptance review.
+- `ship/stop gate`: when the budget is exhausted, stop adding harness and
+  either demo, ship, or REJECT with the missing evidence.
+
+Do not add more harness, validators, state fields, debugging layers, or
+infrastructure unless they directly unblock the user-visible demo or business
+acceptance within the remaining loop budget.
+
+Anti-pattern:
+
+```text
+Loop 1: add schema
+Loop 2: add validator
+Loop 3: add state gate
+Loop 4: add more diagnostics
+```
+
+Preferred pattern:
+
+```text
+Loop 1: produce a fake-data user-visible demo
+Loop 2: replace fake data with the smallest real input-output path
+Loop 3: run business acceptance and decide ship/stop
+```
+
 Prompt:
 
 ```text

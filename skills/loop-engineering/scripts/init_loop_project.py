@@ -32,14 +32,23 @@ as the full project manual.
 - Fill in the project validation command here.
 - If no automated check exists yet, update docs/acceptance.md with manual checks.
 
+## Project Outcome Gate
+
+- Define the user-visible demo before adding harness.
+- Define business acceptance in user-result terms.
+- Set a loop budget, default 3 loops.
+- At the ship/stop gate, demo, ship, or REJECT instead of creating endless next work.
+
 ## Hard Constraints
 
 - Read state before acting.
 - Restate the goal, non-goals, and current loop scope.
 - Execute one bounded loop only.
 - Verify independently before reporting PASS.
+- Verify against business acceptance, not only internal tests.
 - Update state files before stopping.
 - Do not expand scope without recording the decision.
+- Do not add more harness unless it directly unblocks the demo.
 
 ## Where To Look
 

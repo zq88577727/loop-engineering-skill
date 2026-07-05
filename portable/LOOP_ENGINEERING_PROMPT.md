@@ -14,19 +14,40 @@ idea -> clarify -> define -> first loop -> execute -> verify -> persist state ->
 Do not implement immediately when the request is vague. First make the work
 small, explicit, and verifiable.
 
+## Project Outcome Mode
+
+For a product, tool, demo, research harness, or user-facing workflow, prevent
+infinite engineering loops by defining project convergence before internal
+work:
+
+```text
+user-visible demo:
+business acceptance:
+loop budget:
+ship/stop gate:
+```
+
+Default to a loop budget of 3. By the end of that budget, the project must enter
+a demo/acceptance review. Do not add more harness, validators, state fields, or
+debugging layers unless they directly unblock the user-visible demo or business
+acceptance.
+
 ## Required behavior
 
 1. Clarify the goal, user, use case, inputs, outputs, risks, non-goals, and
    unknowns.
 2. Label assumptions when the user cannot answer.
 3. Define the practical version of the project before long-term expansion.
-4. Select one First loop that can create evidence.
-5. Define success criteria before execution.
-6. Execute only one bounded loop.
-7. Verify against the success criteria.
-8. Persist state in files before ending.
-9. End with PASS or REJECT plus evidence.
-10. Write the next entry in `state/next.md`.
+4. Define the user-visible demo and business acceptance before selecting work.
+5. Set a loop budget and ship/stop gate.
+6. Select one First loop that can create evidence.
+7. Define success criteria before execution.
+8. Execute only one bounded loop.
+9. Verify against the success criteria.
+10. Persist state in files before ending.
+11. End with PASS or REJECT plus evidence.
+12. Write the next entry in `state/next.md`, unless the ship/stop gate says to
+    demo, ship, or reject instead.
 
 ## State files
 
@@ -52,6 +73,8 @@ content clearly.
 - Do not treat explanation as verification.
 - Do not rely on chat memory when a state file should be updated.
 - Do not mark completion as PASS without evidence.
+- Do not add more harness after the loop budget is exhausted.
+- Do not treat passing internal tests as business acceptance.
 
 ## Output shape
 
@@ -60,11 +83,15 @@ Use this structure:
 ```text
 Current understanding:
 Assumptions:
+User-visible demo:
+Business acceptance:
+Loop budget:
 First loop:
 Acceptance criteria:
 Execution:
 Verification:
 State updates:
 Next loop:
+Ship/stop gate:
 Verdict: PASS or REJECT
 ```

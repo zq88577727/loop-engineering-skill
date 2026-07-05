@@ -141,6 +141,28 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertIn("Execute one bounded loop only", agents)
         self.assertLessEqual(len(agents.splitlines()), 80)
 
+    def test_initializer_agents_file_enforces_project_outcome_convergence(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+
+            self.run_cmd(
+                PYTHON,
+                "skills/loop-engineering/scripts/init_loop_project.py",
+                "--target",
+                str(target),
+            )
+
+            agents = (target / "AGENTS.md").read_text(encoding="utf-8")
+
+        for phrase in [
+            "## Project Outcome Gate",
+            "user-visible demo",
+            "loop budget",
+            "business acceptance",
+            "ship/stop",
+        ]:
+            self.assertIn(phrase, agents)
+
 
 class PublicReadyAssetTests(unittest.TestCase):
     def test_examples_cover_new_user_and_existing_project_paths(self) -> None:
@@ -412,6 +434,41 @@ class PublicReadyAssetTests(unittest.TestCase):
             "No Codex required",
         ]:
             self.assertIn(phrase, showcase)
+
+    def test_project_outcome_mode_prevents_infinite_engineering_loops(self) -> None:
+        skill = (ROOT / "skills/loop-engineering/SKILL.md").read_text(encoding="utf-8")
+        full_workflow = (
+            ROOT / "skills/loop-engineering/references/full-workflow.md"
+        ).read_text(encoding="utf-8")
+        portable_prompt = (ROOT / "portable/LOOP_ENGINEERING_PROMPT.md").read_text(
+            encoding="utf-8"
+        )
+        portable_prompt_zh = (
+            ROOT / "portable/LOOP_ENGINEERING_PROMPT.zh.md"
+        ).read_text(encoding="utf-8")
+        portable_agents = (ROOT / "portable/AGENTS_TEMPLATE.md").read_text(
+            encoding="utf-8"
+        )
+
+        for text in [skill, full_workflow, portable_prompt, portable_agents]:
+            for phrase in [
+                "Project Outcome Mode",
+                "user-visible demo",
+                "loop budget",
+                "business acceptance",
+                "ship/stop gate",
+                "Do not add more harness",
+            ]:
+                self.assertIn(phrase, text)
+
+        for phrase in [
+            "项目级收敛",
+            "用户可见 demo",
+            "loop 上限",
+            "业务验收",
+            "停止继续补 harness",
+        ]:
+            self.assertIn(phrase, portable_prompt_zh)
 
     def test_live_eval_dry_run_uses_codex_exec_sandbox(self) -> None:
         result = subprocess.run(

@@ -26,6 +26,35 @@ Choose the mode from the user's current state.
 | Existing project state | Execute loop | one bounded task, verification, state update |
 | Completed iteration | Evaluate | PASS/REJECT, failures, next loop |
 
+## Project Outcome Mode
+
+Use Project Outcome Mode whenever a loop is part of building a product, tool,
+demo, research harness, or user-facing workflow. Single-loop correctness is not
+enough; the project must converge toward a user-visible demo.
+
+Before adding engineering infrastructure, define:
+
+```text
+user-visible demo:
+business acceptance:
+loop budget:
+ship/stop gate:
+```
+
+Defaults when the user does not specify otherwise:
+
+- `user-visible demo`: the smallest artifact a user can try or inspect.
+- `business acceptance`: the real outcome the user cares about, not only schema,
+  state, validator, or unit-test success.
+- `loop budget`: at most 3 loops before demo/acceptance review.
+- `ship/stop gate`: after the budget, stop adding harness and either demo,
+  ship, or REJECT with concrete gaps.
+
+Do not add more harness, validators, state fields, or debugging layers unless
+they directly unblock the user-visible demo or business acceptance. If a loop
+only improves internal machinery, explain how it moves the project closer to
+the demo within the remaining loop budget.
+
 ## Required First Output
 
 When triggered, first classify the current mode and state the loop contract before
@@ -35,10 +64,14 @@ doing task work:
 mode:
 confirmed facts:
 assumptions:
+user-visible demo:
+business acceptance:
+loop budget:
 current loop:
 acceptance criteria:
 verification method:
 state files to read or write:
+ship/stop gate:
 ```
 
 If the request is vague, ask only the questions that reduce real uncertainty. If
@@ -54,6 +87,8 @@ the user does not answer, proceed with labeled conservative assumptions.
 6. **Execute one bounded task.** Do not expand scope during the loop.
 7. **Verify independently.** Switch to evaluator posture. Default to REJECT until evidence supports PASS.
 8. **Persist outcomes.** Record completed work, decisions, failures, blockers, and the next loop entry.
+9. **Converge.** Track the remaining loop budget and force a demo/ship/stop
+   decision instead of endlessly generating `state/next.md`.
 
 For the complete 17-step method, read `references/full-workflow.md`.
 
@@ -102,6 +137,8 @@ Evaluator posture:
 - Letting the generator approve its own work.
 - Ending without a next-loop entry.
 - Recording temporary reasoning instead of durable decisions.
+- Passing internal tests while failing the business acceptance.
+- Extending harness work after the loop budget is exhausted.
 
 ## Useful Prompts
 
