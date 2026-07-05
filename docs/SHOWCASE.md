@@ -85,7 +85,10 @@ Treat the demo as a pass only when all of these are true:
 For the next session, use the short continuation prompt:
 
 ```text
-按 state/next.md 继续，只做一个 loop，验证后更新 state。
+用 Loop Engineering 继续这个项目。
 ```
 
-This is the intended user habit: initialize once, then continue from state.
+The intended user habit is simple: ask Loop Engineering to continue. The agent
+must first pass Project Outcome Gate, review `state/next.md` against the
+user-visible demo and business acceptance, then decide continue / demo / ship /
+stop. `state/next.md` is a candidate next step, not the highest instruction.

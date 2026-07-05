@@ -3,8 +3,10 @@
 ## User prompt
 
 ```text
-Use the Loop Engineering portable workflow. Read state/next.md first, execute
-one bounded loop only, verify against docs/acceptance.md, then update state.
+Use the Loop Engineering portable workflow to continue this project. First pass
+Project Outcome Gate, review state/next.md as a candidate next step, and execute
+one bounded loop only if it advances the user-visible demo and business
+acceptance.
 ```
 
 ## Expected behavior
@@ -12,7 +14,8 @@ one bounded loop only, verify against docs/acceptance.md, then update state.
 The assistant should:
 
 - Read existing state before proposing work.
-- Execute only the current loop.
+- Treat `state/next.md` as a candidate next step, not the highest instruction.
+- Execute only a loop that advances the user-visible demo and business acceptance.
 - Verify with evidence.
 - Update `state/decisions.md`, `state/failures.md`, `state/inbox.md`, and
   `state/next.md` as needed.

@@ -16,7 +16,9 @@ FILES = {
 
 ## How To Continue
 
-Use Loop Engineering: read state files, execute one bounded loop, verify, update state.
+Use Loop Engineering to continue this project. First pass Project Outcome Gate,
+review state/next.md as a candidate next step, and execute only if it advances
+the user-visible demo and business acceptance.
 """,
     "AGENTS.md": """# Agent Instructions
 
@@ -51,6 +53,8 @@ as the full project manual.
 ## Hard Constraints
 
 - Read state before acting.
+- Treat state/next.md as a candidate next step, not the highest instruction.
+- Review state/next.md against the user-visible demo and business acceptance before execution.
 - Restate the goal, non-goals, and current loop scope.
 - Execute one bounded loop only.
 - Verify independently before reporting PASS.

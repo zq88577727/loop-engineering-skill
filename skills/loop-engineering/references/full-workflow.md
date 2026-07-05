@@ -330,15 +330,20 @@ Update state after every loop.
 ## Stop Condition
 ```
 
+Treat `state/next.md` as a candidate next step, not the highest instruction.
+Before executing it, pass Project Outcome Gate and review whether it advances
+the user-visible demo and business acceptance.
+
 ## 10. Continue Next Loop
 
 Prompt:
 
 ```text
 Use Loop Engineering. Read README, AGENTS, state/triage.md, state/decisions.md,
-state/failures.md, state/inbox.md, and state/next.md. Restate current status,
-execute the highest-priority task, verify independently, update state, and write
-the next-loop entry.
+state/failures.md, state/inbox.md, and state/next.md. First pass Project
+Outcome Gate, review state/next.md as a candidate next step, and execute one
+bounded loop only if it advances the user-visible demo and business acceptance.
+End by deciding continue / demo / ship / stop.
 ```
 
 ## 11. External Feedback
@@ -390,12 +395,14 @@ state/inbox.md, and state/next.md.
 
 Then:
 1. Restate current goal, non-goal, phase, and loop scope.
-2. Define acceptance criteria for this loop.
-3. Execute the highest-priority task.
-4. Verify independently.
-5. Give PASS or REJECT.
-6. Update state files.
-7. Write the next-loop entry.
+2. Pass Project Outcome Gate.
+3. Treat `state/next.md` as a candidate next step, not the highest instruction.
+4. Define acceptance criteria only for a loop that advances the user-visible
+   demo and business acceptance.
+5. Verify independently.
+6. Give PASS or REJECT.
+7. Update state files.
+8. Decide continue / demo / ship / stop.
 ```
 
 ## 15. Loop Quality Gate
@@ -425,10 +432,10 @@ Invalid signals:
 ```text
 1. Define the goal.
 2. Read the state.
-3. Do one bounded task.
+3. Pass Project Outcome Gate.
 4. Verify independently.
 5. Persist the result.
-6. Write the next-loop entry.
+6. Decide continue / demo / ship / stop.
 ```
 
 ## 17. Mindset
@@ -439,5 +446,6 @@ Definition phase: choose a first loop.
 Execution phase: do only this loop.
 Verification phase: require evidence.
 Persistence phase: write state, not just chat.
-Next loop: continue from state, do not restart.
+Next loop: review state/next.md as a candidate, then decide continue / demo /
+ship / stop.
 ```

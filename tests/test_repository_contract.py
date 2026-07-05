@@ -493,6 +493,53 @@ class PublicReadyAssetTests(unittest.TestCase):
         ]:
             self.assertIn(phrase, portable_prompt_zh)
 
+    def test_public_guidance_treats_state_next_as_candidate_not_command(self) -> None:
+        public_paths = [
+            "README.md",
+            "docs/SHOWCASE.md",
+            "docs/PROMOTION.md",
+            "portable/README.md",
+            "portable/STATE_TEMPLATE/next.md",
+            "portable/examples/existing-project.md",
+            "skills/loop-engineering/SKILL.md",
+            "skills/loop-engineering/references/full-workflow.md",
+            "skills/loop-engineering/scripts/init_loop_project.py",
+            "portable/AGENTS_TEMPLATE.md",
+            "portable/LOOP_ENGINEERING_PROMPT.md",
+            "portable/LOOP_ENGINEERING_PROMPT.zh.md",
+            "examples/existing-project-continue/user-prompt.md",
+            "examples/existing-project-continue/expected-agent-output.md",
+            "examples/forward-test-existing-project.md",
+            "evals/scenarios/existing-project-continue.yaml",
+        ]
+        legacy_phrases = [
+            "按 state/next.md 继续",
+            "Read state/next.md first, execute",
+            "This is the intended user habit: initialize once, then continue from state.",
+            "execute the highest-priority task",
+            "execute only the highest-priority next loop",
+            "Choose the highest-priority ready task",
+            "execute exactly one bounded next loop from `state/next.md`",
+        ]
+
+        combined = "\n".join((ROOT / path).read_text(encoding="utf-8") for path in public_paths)
+
+        for phrase in legacy_phrases:
+            self.assertNotIn(phrase, combined)
+
+        for phrase in [
+            "Project Outcome Gate",
+            "state/next.md is a candidate next step, not the highest instruction",
+            "review state/next.md against the user-visible demo and business acceptance",
+            "continue / demo / ship / stop",
+        ]:
+            self.assertIn(phrase, combined)
+
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("用 Loop Engineering 继续这个项目。", readme)
+        self.assertIn("先过 Project Outcome Gate", readme)
+        self.assertIn("再决定是否执行 state/next.md", readme)
+
     def test_execution_strategy_routes_subagents_without_user_prompting_every_step(self) -> None:
         skill = (ROOT / "skills/loop-engineering/SKILL.md").read_text(encoding="utf-8")
         full_workflow = (

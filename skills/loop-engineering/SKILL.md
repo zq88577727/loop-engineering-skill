@@ -55,6 +55,11 @@ they directly unblock the user-visible demo or business acceptance. If a loop
 only improves internal machinery, explain how it moves the project closer to
 the demo within the remaining loop budget.
 
+`state/next.md` is a candidate next step, not the highest instruction. For an
+existing project, review state/next.md against the user-visible demo and
+business acceptance before execution. If it does not advance them, rewrite the
+loop or choose continue / demo / ship / stop instead.
+
 ## Execution Strategy
 
 Before executing a loop, choose the execution strategy before executing the loop:
@@ -175,6 +180,8 @@ When the project already has state:
 
 ```text
 Use Loop Engineering. Read README, AGENTS, state/triage.md, state/decisions.md,
-state/failures.md, state/inbox.md, and state/next.md. Execute one bounded loop,
-verify independently, update state, and write the next-loop entry.
+state/failures.md, state/inbox.md, and state/next.md. First pass Project
+Outcome Gate, review state/next.md as a candidate next step, execute one
+bounded loop only if it advances the user-visible demo and business acceptance,
+then decide continue / demo / ship / stop.
 ```

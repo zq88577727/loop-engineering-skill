@@ -12,10 +12,11 @@ Execute loop.
 
 ## Execution Contract
 
-- Choose the highest-priority ready task from `state/triage.md`.
-- Execute only that task.
-- Use the verification method in `state/next.md` or define a concrete one before
-  starting.
+- Pass Project Outcome Gate before execution.
+- Treat `state/next.md` as a candidate next step, not the highest instruction.
+- Execute only if the loop advances the user-visible demo and business
+  acceptance.
+- Use or define a concrete verification method before starting.
 - Do not expand scope because a related improvement is visible.
 
 ## Completion Contract
@@ -23,4 +24,4 @@ Execute loop.
 - Report PASS or REJECT with evidence.
 - Update `state/triage.md`, `state/decisions.md`, `state/failures.md`,
   `state/inbox.md`, or `state/next.md` as needed.
-- End with the next-loop entry, not with a generic summary.
+- End by deciding continue / demo / ship / stop, not with a generic summary.

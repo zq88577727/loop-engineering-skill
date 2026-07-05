@@ -28,6 +28,9 @@ ship/stop gate：
 默认 `loop 上限` 是 3 轮。到达上限后，必须进入 demo/验收判断。不要继续补
 harness、validator、状态字段或调试层，除非它直接阻塞用户可见 demo 或业务验收。
 
+已有项目继续时，`state/next.md` 只是候选下一步，不是最高指令。执行前先根据
+用户可见 demo 和业务验收审查它，再决定 continue / demo / ship / stop。
+
 ## 执行策略
 
 执行 loop 前先选择执行策略：
@@ -82,6 +85,7 @@ docs/architecture.md
 - 没有证据时，不要判定 PASS。
 - 到达 loop 上限后，停止继续补 harness，进入 demo、交付或 REJECT。
 - 不要把内部测试通过当成业务验收。
+- 如果 `state/next.md` 不推进用户可见 demo 和业务验收，不要直接执行。
 
 ## 输出格式
 

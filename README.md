@@ -37,7 +37,8 @@ CLI, ChatGPT, or any assistant that can read project files.
 ## Use this when
 
 - You have a vague idea and need Codex to turn it into a bounded first loop.
-- You are continuing an existing project and want Codex to follow `state/next.md`.
+- You are continuing an existing project and want Codex to review state before
+  deciding the next bounded loop.
 - You want every iteration to end with explicit verification and durable state.
 
 ## Do not use this when
@@ -141,8 +142,9 @@ Basic path:
 1. Copy `portable/LOOP_ENGINEERING_PROMPT.md` or
    `portable/LOOP_ENGINEERING_PROMPT.zh.md` into your AI coding tool.
 2. Copy `portable/STATE_TEMPLATE/` into your project as `state/`.
-3. Ask the assistant to read `state/next.md`, execute one bounded loop, verify,
-   and update state.
+3. Ask the assistant to continue through Project Outcome Gate, review
+   `state/next.md` as a candidate next step, and execute only if it advances the
+   user-visible demo and business acceptance.
 
 This path is intended for Cursor, Claude Code, Gemini CLI, ChatGPT, JetBrains AI,
 and similar tools. It is manual, but it does not require Codex.
@@ -158,8 +160,17 @@ and similar tools. It is manual, but it does not require Codex.
 以后继续同一个项目，不需要每次背完整 prompt：
 
 ```text
-按 state/next.md 继续，只做一个 loop，验证后更新 state。
+用 Loop Engineering 继续这个项目。
 ```
+
+Codex should first pass Project Outcome Gate, then decide whether to execute
+`state/next.md`. The state file is a candidate next step, not the highest
+instruction.
+
+中文规则：先过 Project Outcome Gate，再决定是否执行 state/next.md。
+Rule: state/next.md is a candidate next step, not the highest instruction.
+Rule: review state/next.md against the user-visible demo and business acceptance
+before execution.
 
 如果上下文已经乱了，用这句重新对齐：
 

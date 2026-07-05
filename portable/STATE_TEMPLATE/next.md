@@ -17,6 +17,8 @@ Define the next bounded loop.
 ## Suggested Prompt
 
 ```text
-Use the Loop Engineering portable workflow. Read state/next.md first, execute
-one bounded loop only, verify against acceptance criteria, then update state.
+Use the Loop Engineering portable workflow to continue this project. First pass
+Project Outcome Gate, review state/next.md as a candidate next step, and execute
+one bounded loop only if it advances the user-visible demo and business
+acceptance.
 ```

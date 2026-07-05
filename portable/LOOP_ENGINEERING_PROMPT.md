@@ -32,6 +32,10 @@ a demo/acceptance review. Do not add more harness, validators, state fields, or
 debugging layers unless they directly unblock the user-visible demo or business
 acceptance.
 
+For existing projects, `state/next.md` is a candidate next step, not the highest
+instruction. Review it against the user-visible demo and business acceptance
+before execution, then decide continue / demo / ship / stop.
+
 ## Execution Strategy
 
 Before executing a loop, choose the execution strategy before executing the loop:
@@ -92,6 +96,8 @@ content clearly.
 - Do not mark completion as PASS without evidence.
 - Do not add more harness after the loop budget is exhausted.
 - Do not treat passing internal tests as business acceptance.
+- Do not execute `state/next.md` when it does not advance the user-visible demo
+  and business acceptance.
 
 ## Output shape
 

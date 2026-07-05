@@ -15,6 +15,10 @@ long-running tasks, and existing projects with `state/next.md`.
 7. Verify the result against business acceptance, not only internal tests.
 8. Update state before ending.
 
+When continuing an existing project, state/next.md is a candidate next step, not
+the highest instruction. Review it against the user-visible demo and business
+acceptance before execution, then decide continue / demo / ship / stop.
+
 ## Project Outcome Mode
 
 For product, tool, demo, research-harness, or user-facing workflow work:
@@ -57,6 +61,8 @@ Next loop:
 - Do not use chat memory as durable state.
 - Do not mark PASS without concrete evidence.
 - Do not treat internal test success as business acceptance.
+- Do not execute state/next.md when it does not advance the user-visible demo
+  and business acceptance.
 
 ## Where To Look
 

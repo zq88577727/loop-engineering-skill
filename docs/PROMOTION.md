@@ -76,7 +76,9 @@ Codex path:
    extension for saving useful snippets, but I do not know the exact
    requirements yet. Do not implement yet."
 5. Show the generated or proposed state files.
-6. Continue with: "按 state/next.md 继续，只做一个 loop，验证后更新 state。"
+6. Continue with: "用 Loop Engineering 继续这个项目。"
+7. Show that the agent passes Project Outcome Gate before deciding whether
+   `state/next.md` should be executed.
 ```
 
 Portable path:
@@ -85,7 +87,9 @@ Portable path:
 1. Open portable/README.md.
 2. Copy portable/LOOP_ENGINEERING_PROMPT.md or portable/LOOP_ENGINEERING_PROMPT.zh.md.
 3. Copy portable/STATE_TEMPLATE/ into the project as state/.
-4. Prompt the AI coding tool to run one bounded loop and update state.
+4. Prompt the AI coding tool to continue through Project Outcome Gate, review
+   `state/next.md` as a candidate next step, and run one bounded loop only if it
+   advances the user-visible demo and business acceptance.
 ```
 
 ## Positioning notes

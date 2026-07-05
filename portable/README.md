@@ -45,8 +45,10 @@ implement immediately.
 ## Existing project prompt
 
 ```text
-Use the Loop Engineering portable workflow. Read state/next.md first, execute
-one bounded loop only, verify against docs/acceptance.md, then update state.
+Use the Loop Engineering portable workflow to continue this project. First pass
+Project Outcome Gate, review state/next.md as a candidate next step, and execute
+one bounded loop only if it advances the user-visible demo and business
+acceptance.
 ```
 
 ## PASS criteria
@@ -57,6 +59,7 @@ The assistant followed the workflow only if it:
 - Defined one bounded loop with success criteria.
 - Used or created `state/triage.md`, `state/decisions.md`, `state/inbox.md`,
   `state/failures.md`, and `state/next.md`.
+- Treated `state/next.md` as a candidate next step, not the highest instruction.
 - Verified the result with PASS or REJECT evidence.
 - Updated `state/next.md` for the next session.
 

@@ -11,9 +11,9 @@ existing project state under:
 /tmp/loop-engineering-forward-test-agent
 ```
 
-The agent was instructed to read README, AGENTS, docs, and state files, execute
-exactly one bounded next loop from `state/next.md`, avoid implementation, and
-write updated planning/state files under:
+The agent was instructed to read README, AGENTS, docs, and state files, pass
+Project Outcome Gate, review `state/next.md` as a candidate next step, avoid
+implementation, and write updated planning/state files under:
 
 ```text
 /tmp/loop-engineering-forward-test-existing-project
@@ -48,6 +48,8 @@ checked for implementation files.
   and acceptance tests.
 - `state/next.md` pointed to the first authorized build loop and preserved an
   implementation authorization gate.
+- The continuation decision treated `state/next.md` as a candidate next step,
+  not the highest instruction.
 - No implementation files were found with this check:
 
 ```bash
