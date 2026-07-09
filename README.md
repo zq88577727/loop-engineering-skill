@@ -246,10 +246,7 @@ When a project reaches `STOP / DEMO_FREEZE`:
 - do not keep adding summary/gate/policy/template, schema, validator, or
   debug-layer work by default;
 - reject internal-harness drift after the loop budget is exhausted;
-- only resume engineering when the user explicitly asks for further
-  implementation and provides a new acceptance target.
-
-Only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
+- only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
 
 This prevents the failure mode where every individual loop is correct, but the
 overall project never reaches a useful stopping point.

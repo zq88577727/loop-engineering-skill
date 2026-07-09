@@ -557,6 +557,7 @@ class PublicReadyAssetTests(unittest.TestCase):
             "portable_agents",
             "state_next_template",
         ]:
+            searchable_text = text[name].lower()
             for phrase in [
                 "Stop / Demo-Freeze Gate",
                 "STOP / DEMO_FREEZE",
@@ -568,7 +569,7 @@ class PublicReadyAssetTests(unittest.TestCase):
                 "summary/gate/policy/template",
                 "internal-harness drift",
             ]:
-                self.assertIn(phrase, text[name], f"{name} missing {phrase!r}")
+                self.assertIn(phrase.lower(), searchable_text, f"{name} missing {phrase!r}")
 
         for phrase in [
             "Stop / Demo-Freeze Gate",
