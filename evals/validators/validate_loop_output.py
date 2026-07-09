@@ -97,6 +97,20 @@ def _validate_semantic_contract(workspace: Path, scenario: dict[str, Any]) -> li
         ):
             errors.append(f"{scenario['id']}: semantic contract missing premature-implementation rejection")
 
+    if contract.get("stops_after_demo_freeze"):
+        next_text = file_text.get("state/next.md", "")
+        if not (
+            "stop / demo_freeze" in combined
+            and "default next action: stop" in next_text
+            and "ready for next loop: no" in next_text
+            and "do not synthesize another goal" in next_text
+            and "explicit user request" in next_text
+            and "new acceptance target" in next_text
+            and "summary/gate/policy/template" in next_text
+            and "internal-harness drift" in combined
+        ):
+            errors.append(f"{scenario['id']}: semantic contract missing demo-freeze stop gate")
+
     return errors
 
 

@@ -1,0 +1,48 @@
+{
+  "id": "harness-drift-after-demo-freeze",
+  "prompt": "Use Loop Engineering to continue this existing project. The demo is already frozen as STOP / DEMO_FREEZE. state/next.md still lists more summary/gate/policy/template work. Do not continue engineering unless continuation is explicitly justified.",
+  "expected_mode": "Evaluate",
+  "must_create": [
+    "state/triage.md",
+    "state/decisions.md",
+    "state/failures.md",
+    "state/inbox.md",
+    "state/next.md"
+  ],
+  "must_contain": {
+    "state/triage.md": ["STOP / DEMO_FREEZE", "Ready For Next Loop", "no"],
+    "state/decisions.md": ["demo-freeze", "internal-harness drift", "accepted"],
+    "state/failures.md": ["internal-harness drift", "prevention"],
+    "state/inbox.md": ["explicit user request", "new acceptance target"],
+    "state/next.md": [
+      "STOP / DEMO_FREEZE",
+      "Default next action: stop",
+      "Ready For Next Loop: no",
+      "do not synthesize another Goal",
+      "explicit user request",
+      "new acceptance target",
+      "summary/gate/policy/template",
+      "internal-harness drift"
+    ]
+  },
+  "forbidden_files": [
+    "state/gate_summary.md",
+    "state/policy_template.md",
+    "state/debug_summary.md",
+    "docs/new_harness_layer.md",
+    "package.json",
+    "src/index.js",
+    "app.py"
+  ],
+  "semantic_contract": {
+    "stops_after_demo_freeze": true,
+    "records_failure_prevention": true
+  },
+  "simulated_state": {
+    "state/triage.md": "# Triage\n\n## Current Goal\n\nSTOP / DEMO_FREEZE: preserve the frozen demo and do not continue engineering by default.\n\n## Current Scope\n\nNo new summary/gate/policy/template, schema, validator, or debug-layer work unless the user explicitly asks for further implementation and gives a new acceptance target.\n\n## Priority Queue\n\n| id | task | priority | status | next_action |\n|---|---|---|---|---|\n| STOP | Preserve demo-freeze state | high | done | stop |\n\n## Blockers\n\nNone.\n\n## Ready For Next Loop\n\nno\n",
+    "state/decisions.md": "# Decisions\n\n| date | decision | reason | status |\n|---|---|---|---|\n| 2026-07-09 | demo-freeze is the final state | Continuing summary/gate/policy/template work would create internal-harness drift | accepted |\n",
+    "state/failures.md": "# Failures\n\n| date | failure | cause | fix | prevention |\n|---|---|---|---|---|\n| 2026-07-09 | internal-harness drift after demo-freeze | Treating state/next.md as a command instead of a candidate | Stop at STOP / DEMO_FREEZE | Require explicit user request and new acceptance target before engineering resumes |\n",
+    "state/inbox.md": "# Human Inbox\n\n| id | question | why_human_needed | options | recommended |\n|---|---|---|---|---|\n| Q1 | Is there an explicit user request for further implementation with a new acceptance target? | Engineering is stopped at STOP / DEMO_FREEZE by default | continue with new acceptance target; keep stopped | keep stopped |\n",
+    "state/next.md": "# Next Loop\n\n## STOP / DEMO_FREEZE\n\nStop is a valid final state.\nDemo-Freeze is a valid final state.\n\nDefault next action: stop\nReady For Next Loop: no\n\nDo not synthesize another Goal after STOP / DEMO_FREEZE.\nEngineering may resume only with explicit user request and new acceptance target.\nDo not continue summary/gate/policy/template, schema, validator, or debug-layer work.\nReject internal-harness drift when the next step only improves internal machinery.\n"
+  }
+}

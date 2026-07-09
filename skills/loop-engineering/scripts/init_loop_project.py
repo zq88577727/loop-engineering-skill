@@ -41,6 +41,17 @@ as the full project manual.
 - Set a loop budget, default 3 loops.
 - At the ship/stop gate, demo, ship, or REJECT instead of creating endless next work.
 
+## Stop / Demo-Freeze Gate
+
+- Stop is a valid final state.
+- Demo-Freeze is a valid final state.
+- If the project is `STOP / DEMO_FREEZE`, demo, ship, stop, handoff, or freeze, do not synthesize another Goal.
+- Only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
+- Do not make summary/gate/policy/template, schema, validator, or debug-layer work the default next action.
+- Reject internal-harness drift after the loop budget is exhausted.
+
+Only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
+
 ## Execution Strategy
 
 - Before each loop, choose the execution strategy before executing the loop.
@@ -62,6 +73,8 @@ as the full project manual.
 - Update state files before stopping.
 - Do not expand scope without recording the decision.
 - Do not add more harness unless it directly unblocks the demo.
+- Do not synthesize another Goal after STOP / DEMO_FREEZE.
+- Do not continue summary/gate/policy/template work without explicit user continuation and a new acceptance target.
 
 ## Where To Look
 
@@ -120,6 +133,25 @@ as the full project manual.
 |---|---|---|---|---|
 """,
     "state/next.md": """# Next Loop
+
+## Stop / Demo-Freeze Gate
+
+## STOP / DEMO_FREEZE
+
+Stop is a valid final state.
+Demo-Freeze is a valid final state.
+
+Default next action: stop
+Ready For Next Loop: no
+
+Engineering may resume only with explicit user request and new acceptance target.
+Only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
+
+do not synthesize another Goal after STOP / DEMO_FREEZE.
+Do not continue summary/gate/policy/template, schema, validator, or debug-layer
+work unless it directly advances a new user-visible demo or business acceptance.
+Reject internal-harness drift when the next step only improves internal
+machinery.
 
 ## Next Goal
 

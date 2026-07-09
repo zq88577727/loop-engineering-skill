@@ -31,6 +31,19 @@ harness、validator、状态字段或调试层，除非它直接阻塞用户可�
 已有项目继续时，`state/next.md` 只是候选下一步，不是最高指令。执行前先根据
 用户可见 demo 和业务验收审查它，再决定 continue / demo / ship / stop。
 
+## Stop / Demo-Freeze Gate
+
+Stop 是合法终态。Demo-Freeze 是合法终态。已经达到用户可见 demo、handoff
+package、audit package、业务决策点，或 `STOP / DEMO_FREEZE` 状态时，不应自动
+变成下一轮工程任务。
+
+到达 STOP / DEMO_FREEZE 后：
+
+- 不要自动生成下一批 Goal；
+- 不要把 summary/gate/policy/template、schema、validator 或 debug layer 当成默认下一步；
+- loop 上限耗尽后，要拒绝继续造成内部 harness 漂移；
+- 只有用户明确要求继续工程实现，并给出新的验收目标，才恢复工程 loop。
+
 ## 执行策略
 
 执行 loop 前先选择执行策略：
@@ -58,7 +71,9 @@ harness、validator、状态字段或调试层，除非它直接阻塞用户可�
 10. 按成功标准验证结果。
 11. 结束前把状态写入文件。
 12. 用 PASS 或 REJECT 加证据收尾。
-13. 只有在 ship/stop gate 允许继续时，才更新 `state/next.md` 进入下一轮。
+13. 只有在 ship/stop gate 允许继续时，才更新 `state/next.md` 进入下一轮；
+    如果结论是 demo、ship、stop、handoff、freeze 或 STOP / DEMO_FREEZE，
+    不要自动生成下一批 Goal。
 
 ## 状态文件
 
@@ -86,6 +101,8 @@ docs/architecture.md
 - 到达 loop 上限后，停止继续补 harness，进入 demo、交付或 REJECT。
 - 不要把内部测试通过当成业务验收。
 - 如果 `state/next.md` 不推进用户可见 demo 和业务验收，不要直接执行。
+- STOP / DEMO_FREEZE 后，不要继续新增 summary/gate/policy/template 中间层；
+  只有用户明确要求继续工程实现并给出新的验收目标时才恢复。
 
 ## 输出格式
 

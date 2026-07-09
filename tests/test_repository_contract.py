@@ -117,11 +117,17 @@ class RepositoryContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp)
 
-            self.run_cmd(
-                PYTHON,
-                "skills/loop-engineering/scripts/init_loop_project.py",
-                "--target",
-                str(target),
+            subprocess.run(
+                [
+                    PYTHON,
+                    "skills/loop-engineering/scripts/init_loop_project.py",
+                    "--target",
+                    str(target),
+                ],
+                cwd=ROOT,
+                check=True,
+                text=True,
+                capture_output=True,
             )
 
             agents = (target / "AGENTS.md").read_text(encoding="utf-8")
@@ -145,11 +151,17 @@ class RepositoryContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp)
 
-            self.run_cmd(
-                PYTHON,
-                "skills/loop-engineering/scripts/init_loop_project.py",
-                "--target",
-                str(target),
+            subprocess.run(
+                [
+                    PYTHON,
+                    "skills/loop-engineering/scripts/init_loop_project.py",
+                    "--target",
+                    str(target),
+                ],
+                cwd=ROOT,
+                check=True,
+                text=True,
+                capture_output=True,
             )
 
             agents = (target / "AGENTS.md").read_text(encoding="utf-8")
@@ -167,11 +179,17 @@ class RepositoryContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp)
 
-            self.run_cmd(
-                PYTHON,
-                "skills/loop-engineering/scripts/init_loop_project.py",
-                "--target",
-                str(target),
+            subprocess.run(
+                [
+                    PYTHON,
+                    "skills/loop-engineering/scripts/init_loop_project.py",
+                    "--target",
+                    str(target),
+                ],
+                cwd=ROOT,
+                check=True,
+                text=True,
+                capture_output=True,
             )
 
             agents = (target / "AGENTS.md").read_text(encoding="utf-8")
@@ -211,6 +229,7 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertIn("vague-idea", report_text)
         self.assertIn("existing-project-continue", report_text)
         self.assertIn("premature-implementation", report_text)
+        self.assertIn("harness-drift-after-demo-freeze", report_text)
 
     def test_ci_workflow_exists(self) -> None:
         workflow = ROOT / ".github/workflows/validate.yml"
@@ -311,6 +330,7 @@ class PublicReadyAssetTests(unittest.TestCase):
             "evals/scenarios/vague-idea.yaml",
             "evals/scenarios/existing-project-continue.yaml",
             "evals/scenarios/premature-implementation.yaml",
+            "evals/scenarios/harness-drift-after-demo-freeze.yaml",
             "evals/reports/offline-eval-report.md",
             ".github/workflows/live-eval.yml",
         ]
@@ -334,10 +354,15 @@ class PublicReadyAssetTests(unittest.TestCase):
         payload = json.loads(result.stdout)
 
         self.assertEqual(payload["status"], "PASS")
-        self.assertEqual(payload["scenario_count"], 3)
+        self.assertEqual(payload["scenario_count"], 4)
         self.assertEqual(
             sorted(s["id"] for s in payload["scenarios"]),
-            ["existing-project-continue", "premature-implementation", "vague-idea"],
+            [
+                "existing-project-continue",
+                "harness-drift-after-demo-freeze",
+                "premature-implementation",
+                "vague-idea",
+            ],
         )
 
     def test_ci_runs_offline_eval_and_live_eval_is_manual(self) -> None:
@@ -509,6 +534,95 @@ class PublicReadyAssetTests(unittest.TestCase):
         ]:
             self.assertIn(phrase, portable_prompt_zh)
 
+    def test_stop_demo_freeze_gate_prevents_harness_drift_after_delivery(self) -> None:
+        public_files = {
+            "skill": ROOT / "skills/loop-engineering/SKILL.md",
+            "full_workflow": ROOT / "skills/loop-engineering/references/full-workflow.md",
+            "readme": ROOT / "README.md",
+            "portable_prompt": ROOT / "portable/LOOP_ENGINEERING_PROMPT.md",
+            "portable_prompt_zh": ROOT / "portable/LOOP_ENGINEERING_PROMPT.zh.md",
+            "portable_agents": ROOT / "portable/AGENTS_TEMPLATE.md",
+            "state_next_template": ROOT / "portable/STATE_TEMPLATE/next.md",
+        }
+        text = {
+            name: path.read_text(encoding="utf-8")
+            for name, path in public_files.items()
+        }
+
+        for name in [
+            "skill",
+            "full_workflow",
+            "readme",
+            "portable_prompt",
+            "portable_agents",
+            "state_next_template",
+        ]:
+            for phrase in [
+                "Stop / Demo-Freeze Gate",
+                "STOP / DEMO_FREEZE",
+                "Stop is a valid final state",
+                "Demo-Freeze is a valid final state",
+                "do not synthesize another Goal",
+                "explicitly asks for further implementation",
+                "new acceptance target",
+                "summary/gate/policy/template",
+                "internal-harness drift",
+            ]:
+                self.assertIn(phrase, text[name], f"{name} missing {phrase!r}")
+
+        for phrase in [
+            "Stop / Demo-Freeze Gate",
+            "STOP / DEMO_FREEZE",
+            "Stop 是合法终态",
+            "Demo-Freeze 是合法终态",
+            "不要自动生成下一批 Goal",
+            "明确要求继续工程实现",
+            "新的验收目标",
+            "summary/gate/policy/template",
+            "内部 harness 漂移",
+        ]:
+            self.assertIn(phrase, text["portable_prompt_zh"])
+
+    def test_initializer_templates_default_to_stop_after_demo_freeze(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+
+            subprocess.run(
+                [
+                    PYTHON,
+                    "skills/loop-engineering/scripts/init_loop_project.py",
+                    "--target",
+                    str(target),
+                ],
+                cwd=ROOT,
+                check=True,
+                text=True,
+                capture_output=True,
+            )
+
+            agents = (target / "AGENTS.md").read_text(encoding="utf-8")
+            next_state = (target / "state/next.md").read_text(encoding="utf-8")
+
+        for phrase in [
+            "Stop / Demo-Freeze Gate",
+            "STOP / DEMO_FREEZE",
+            "Stop is a valid final state",
+            "Demo-Freeze is a valid final state",
+            "do not synthesize another Goal",
+            "explicitly asks for further implementation",
+            "new acceptance target",
+            "summary/gate/policy/template",
+        ]:
+            self.assertIn(phrase, agents)
+
+        for phrase in [
+            "STOP / DEMO_FREEZE",
+            "Default next action: stop",
+            "Ready For Next Loop: no",
+            "Engineering may resume only with explicit user request and new acceptance target",
+        ]:
+            self.assertIn(phrase, next_state)
+
     def test_public_guidance_treats_state_next_as_candidate_not_command(self) -> None:
         public_paths = [
             "README.md",
@@ -605,7 +719,7 @@ class PublicReadyAssetTests(unittest.TestCase):
 
         self.assertEqual(payload["status"], "DRY_RUN")
         self.assertEqual(payload["runner"], "codex exec")
-        self.assertEqual(payload["scenario_count"], 3)
+        self.assertEqual(payload["scenario_count"], 4)
         for scenario in payload["scenarios"]:
             command_list = scenario["command"]
             command = " ".join(command_list)

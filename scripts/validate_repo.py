@@ -64,6 +64,7 @@ REQUIRED_FILES = [
     "evals/scenarios/vague-idea.yaml",
     "evals/scenarios/existing-project-continue.yaml",
     "evals/scenarios/premature-implementation.yaml",
+    "evals/scenarios/harness-drift-after-demo-freeze.yaml",
     "evals/reports/offline-eval-report.md",
     "evals/reports/failures/.gitkeep",
 ]

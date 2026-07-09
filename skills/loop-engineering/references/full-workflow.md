@@ -170,6 +170,28 @@ Do not add more harness, validators, state fields, debugging layers, or
 infrastructure unless they directly unblock the user-visible demo or business
 acceptance within the remaining loop budget.
 
+## 6A.1 Stop / Demo-Freeze Gate
+
+Stop is a valid final state. Demo-Freeze is a valid final state. A user-visible
+demo, handoff package, audit package, business decision checkpoint, or
+`STOP / DEMO_FREEZE` state is allowed to end the loop sequence.
+
+After STOP / DEMO_FREEZE:
+
+- do not synthesize another Goal;
+- do not create a next-loop entry unless continuation is justified;
+- do not make summary/gate/policy/template, schema, validator, or debug-layer
+  work the default next action;
+- reject internal-harness drift after the loop budget is exhausted;
+- only resume engineering when the user explicitly asks for further
+  implementation and provides a new acceptance target.
+
+Only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
+
+If the next candidate task only makes the harness more internally complete but
+does not advance the user-visible demo or business acceptance, choose stop or
+ask for explicit continuation.
+
 Anti-pattern:
 
 ```text
@@ -287,6 +309,11 @@ Update state after every loop.
 ## Ready For Next Loop
 ```
 
+Use `Ready For Next Loop: no` when the project is in STOP / DEMO_FREEZE, demo,
+ship, stop, handoff, or freeze state. In that case the default next action is
+stop, and engineering may resume only with explicit user request and new
+acceptance target.
+
 `state/decisions.md`:
 
 ```markdown
@@ -334,6 +361,11 @@ Treat `state/next.md` as a candidate next step, not the highest instruction.
 Before executing it, pass Project Outcome Gate and review whether it advances
 the user-visible demo and business acceptance.
 
+When the current state is STOP / DEMO_FREEZE, `state/next.md` should record
+`Default next action: stop` and `Ready For Next Loop: no`. Do not turn that
+state into another Goal unless the user explicitly asks for further
+implementation and provides a new acceptance target.
+
 ## 10. Continue Next Loop
 
 Prompt:
@@ -343,7 +375,9 @@ Use Loop Engineering. Read README, AGENTS, state/triage.md, state/decisions.md,
 state/failures.md, state/inbox.md, and state/next.md. First pass Project
 Outcome Gate, review state/next.md as a candidate next step, and execute one
 bounded loop only if it advances the user-visible demo and business acceptance.
-End by deciding continue / demo / ship / stop.
+End by deciding continue / demo / ship / stop. If the project is STOP /
+DEMO_FREEZE, do not synthesize another Goal unless the user explicitly asks for
+further implementation and gives a new acceptance target.
 ```
 
 ## 11. External Feedback
@@ -368,6 +402,7 @@ A phase is complete only when:
 - major failures are fixed or recorded
 - decisions are durable
 - README or state explains how to resume
+- STOP / DEMO_FREEZE is recorded when the correct next action is to stop
 
 ## 13. Vague-Idea Prompt
 
@@ -403,6 +438,7 @@ Then:
 6. Give PASS or REJECT.
 7. Update state files.
 8. Decide continue / demo / ship / stop.
+9. If the decision is STOP / DEMO_FREEZE, do not create another Goal.
 ```
 
 ## 15. Loop Quality Gate
@@ -415,15 +451,17 @@ A loop is valid when it has:
 - action
 - verification
 - record
-- next loop
+- next loop only when continuation is justified, or STOP / DEMO_FREEZE
 
 Invalid signals:
 
 - prompt only, no state
 - execution without verification
 - summary without file records
-- no next-loop entry
+- no next-loop entry when continuation is justified
+- another Goal after STOP / DEMO_FREEZE without explicit user continuation
 - uncontrolled scope expansion
+- summary/gate/policy/template work that only increases internal-harness drift
 - unrecorded failures
 - generator self-approval
 
@@ -436,6 +474,7 @@ Invalid signals:
 4. Verify independently.
 5. Persist the result.
 6. Decide continue / demo / ship / stop.
+7. If STOP / DEMO_FREEZE, stop instead of generating another Goal.
 ```
 
 ## 17. Mindset
@@ -448,4 +487,7 @@ Verification phase: require evidence.
 Persistence phase: write state, not just chat.
 Next loop: review state/next.md as a candidate, then decide continue / demo /
 ship / stop.
+Stop phase: STOP / DEMO_FREEZE is valid; do not synthesize another Goal unless
+the user explicitly asks for further implementation and provides a new
+acceptance target.
 ```

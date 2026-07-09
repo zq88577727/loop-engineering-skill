@@ -1,6 +1,6 @@
 ---
 name: loop-engineering
-description: Use when a user has a vague idea, early project concept, stalled project, reusable workflow, or long-running Codex task and needs to turn it into bounded loops with goals, acceptance criteria, state files, execution, independent verification, memory, and a next-loop entry.
+description: Use when a user has a vague idea, early project concept, stalled project, reusable workflow, or long-running Codex task and needs to turn it into bounded loops with goals, acceptance criteria, state files, execution, independent verification, memory, and a justified next-loop entry or STOP / DEMO_FREEZE final state.
 ---
 
 # Loop Engineering
@@ -24,7 +24,7 @@ Choose the mode from the user's current state.
 | Vague idea | Clarify | questions, assumptions, project definition |
 | Defined goal but no structure | Scaffold | README, AGENTS, docs, state files |
 | Existing project state | Execute loop | one bounded task, verification, state update |
-| Completed iteration | Evaluate | PASS/REJECT, failures, next loop |
+| Completed iteration | Evaluate | PASS/REJECT, failures, next loop only when justified, or STOP / DEMO_FREEZE |
 
 ## Project Outcome Mode
 
@@ -59,6 +59,29 @@ the demo within the remaining loop budget.
 existing project, review state/next.md against the user-visible demo and
 business acceptance before execution. If it does not advance them, rewrite the
 loop or choose continue / demo / ship / stop instead.
+
+## Stop / Demo-Freeze Gate
+
+Stop is a valid final state. Demo-Freeze is a valid final state. A completed
+user-visible demo, handoff package, audit package, or business decision
+checkpoint does not automatically become another engineering loop.
+
+When the project state is `STOP / DEMO_FREEZE`, demo, ship, stop, handoff, or
+freeze:
+
+- do not synthesize another Goal;
+- do not create a next-loop entry unless continuation is justified;
+- do not add summary/gate/policy/template, schema, validator, or debug-layer
+  work as the default next action;
+- reject internal-harness drift after the loop budget is exhausted;
+- only resume engineering when the user explicitly asks for further
+  implementation and provides a new acceptance target.
+
+Only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
+
+If the next candidate task only improves internal machinery without advancing
+the user-visible demo or business acceptance, stop or ask for explicit
+continuation instead of creating more harness.
 
 ## Execution Strategy
 
@@ -110,7 +133,8 @@ the user does not answer, proceed with labeled conservative assumptions.
    subagent review, or no subagent before execution.
 7. **Execute one bounded task.** Do not expand scope during the loop.
 8. **Verify independently.** Switch to evaluator posture. Default to REJECT until evidence supports PASS.
-9. **Persist outcomes.** Record completed work, decisions, failures, blockers, and the next loop entry.
+9. **Persist outcomes.** Record completed work, decisions, failures, blockers,
+   and the next-loop entry only when continuation is justified.
 10. **Converge.** Track the remaining loop budget and force a demo/ship/stop
    decision instead of endlessly generating `state/next.md`.
 
@@ -163,6 +187,8 @@ Evaluator posture:
 - Recording temporary reasoning instead of durable decisions.
 - Passing internal tests while failing the business acceptance.
 - Extending harness work after the loop budget is exhausted.
+- Continuing to generate summary/gate/policy/template layers after STOP /
+  DEMO_FREEZE or a handoff checkpoint; this is internal-harness drift.
 - Asking the user to manually decide subagent usage every loop instead of using
   the Execution Strategy rules.
 
@@ -183,5 +209,7 @@ Use Loop Engineering. Read README, AGENTS, state/triage.md, state/decisions.md,
 state/failures.md, state/inbox.md, and state/next.md. First pass Project
 Outcome Gate, review state/next.md as a candidate next step, execute one
 bounded loop only if it advances the user-visible demo and business acceptance,
-then decide continue / demo / ship / stop.
+then decide continue / demo / ship / stop. If the project is STOP /
+DEMO_FREEZE, do not synthesize another Goal unless the user explicitly asks for
+further implementation and gives a new acceptance target.
 ```

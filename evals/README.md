@@ -74,3 +74,5 @@ time.
   continuation loop.
 - `premature-implementation.yaml`: pressure to code too early should be rejected
   and converted into a first-loop state plan.
+- `harness-drift-after-demo-freeze.yaml`: STOP / DEMO_FREEZE should stop instead
+  of generating another Goal or adding summary/gate/policy/template layers.

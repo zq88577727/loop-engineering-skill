@@ -36,6 +36,24 @@ For existing projects, `state/next.md` is a candidate next step, not the highest
 instruction. Review it against the user-visible demo and business acceptance
 before execution, then decide continue / demo / ship / stop.
 
+## Stop / Demo-Freeze Gate
+
+Stop is a valid final state. Demo-Freeze is a valid final state. A user-visible
+demo, handoff package, audit package, business decision checkpoint, or
+`STOP / DEMO_FREEZE` state should not automatically become another engineering
+loop.
+
+After STOP / DEMO_FREEZE:
+
+- do not synthesize another Goal;
+- do not make summary/gate/policy/template, schema, validator, or debug-layer
+  work the default next action;
+- reject internal-harness drift after the loop budget is exhausted;
+- only resume engineering when the user explicitly asks for further
+  implementation and provides a new acceptance target.
+
+Only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
+
 ## Execution Strategy
 
 Before executing a loop, choose the execution strategy before executing the loop:
@@ -67,8 +85,9 @@ record the chosen strategy and proceed.
 10. Verify against the success criteria.
 11. Persist state in files before ending.
 12. End with PASS or REJECT plus evidence.
-13. Write the next entry in `state/next.md`, unless the ship/stop gate says to
-    demo, ship, or reject instead.
+13. Write the next entry in `state/next.md` only when continuation is justified.
+    If the ship/stop gate says demo, ship, stop, handoff, freeze, or
+    STOP / DEMO_FREEZE, do not synthesize another Goal.
 
 ## State files
 
@@ -98,6 +117,9 @@ content clearly.
 - Do not treat passing internal tests as business acceptance.
 - Do not execute `state/next.md` when it does not advance the user-visible demo
   and business acceptance.
+- Do not continue summary/gate/policy/template layers after STOP /
+  DEMO_FREEZE unless the user explicitly asks for further implementation and
+  gives a new acceptance target.
 
 ## Output shape
 

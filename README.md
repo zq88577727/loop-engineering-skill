@@ -145,6 +145,10 @@ Basic path:
 3. Ask the assistant to continue through Project Outcome Gate, review
    `state/next.md` as a candidate next step, and execute only if it advances the
    user-visible demo and business acceptance.
+4. If the project is already in `STOP / DEMO_FREEZE`, demo, ship, stop,
+   handoff, or freeze state, do not synthesize another Goal. Engineering should
+   resume only when the user explicitly asks for further implementation and
+   provides a new acceptance target.
 
 This path is intended for Cursor, Claude Code, Gemini CLI, ChatGPT, JetBrains AI,
 and similar tools. It is manual, but it does not require Codex.
@@ -171,6 +175,9 @@ instruction.
 Rule: state/next.md is a candidate next step, not the highest instruction.
 Rule: review state/next.md against the user-visible demo and business acceptance
 before execution.
+Rule: STOP / DEMO_FREEZE is a valid final state; do not synthesize another Goal
+after demo-freeze unless the user explicitly asks for further implementation
+and gives a new acceptance target.
 
 如果上下文已经乱了，用这句重新对齐：
 
@@ -225,7 +232,27 @@ Loop Engineering keeps Codex work inside a visible loop:
 | Execute | Build, research, write, or test | Concrete result |
 | Verify | Compare result against the acceptance target | PASS or REJECT |
 | Persist State | Save decisions, failures, and next actions | Durable context |
-| Continue | Start the next loop from current evidence | Next iteration |
+| Continue Or Stop | Start the next loop only when justified, or STOP / DEMO_FREEZE | Next iteration or final stop |
+
+## Stop / Demo-Freeze Gate
+
+Stop is a valid final state. Demo-Freeze is a valid final state. A completed
+user-visible demo, handoff package, audit package, or business decision
+checkpoint should not automatically become another engineering loop.
+
+When a project reaches `STOP / DEMO_FREEZE`:
+
+- do not synthesize another Goal;
+- do not keep adding summary/gate/policy/template, schema, validator, or
+  debug-layer work by default;
+- reject internal-harness drift after the loop budget is exhausted;
+- only resume engineering when the user explicitly asks for further
+  implementation and provides a new acceptance target.
+
+Only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
+
+This prevents the failure mode where every individual loop is correct, but the
+overall project never reaches a useful stopping point.
 
 ## Repository Layout
 
@@ -305,6 +332,8 @@ The offline eval covers three scenarios:
 - existing project -> continue one bounded loop from state
 - premature implementation pressure -> reject coding too early and persist a
   next-loop plan
+- harness drift after demo-freeze -> stop instead of generating another Goal or
+  adding summary/gate/policy/template layers
 
 The latest offline report is stored in `evals/reports/offline-eval-report.md`.
 

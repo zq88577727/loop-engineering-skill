@@ -19,6 +19,20 @@ When continuing an existing project, state/next.md is a candidate next step, not
 the highest instruction. Review it against the user-visible demo and business
 acceptance before execution, then decide continue / demo / ship / stop.
 
+## Stop / Demo-Freeze Gate
+
+Stop is a valid final state. Demo-Freeze is a valid final state. If the project
+is already in `STOP / DEMO_FREEZE`, demo, ship, stop, handoff, or freeze state,
+do not synthesize another Goal.
+
+- Only resume engineering when the user explicitly asks for further
+  implementation and provides a new acceptance target.
+- Do not make summary/gate/policy/template, schema, validator, or debug-layer
+  work the default next action.
+- Reject internal-harness drift after the loop budget is exhausted.
+
+Only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
+
 ## Project Outcome Mode
 
 For product, tool, demo, research-harness, or user-facing workflow work:
@@ -63,6 +77,9 @@ Next loop:
 - Do not treat internal test success as business acceptance.
 - Do not execute state/next.md when it does not advance the user-visible demo
   and business acceptance.
+- Do not synthesize another Goal after STOP / DEMO_FREEZE.
+- Do not continue summary/gate/policy/template layers without an explicit user
+  request and new acceptance target.
 
 ## Where To Look
 
