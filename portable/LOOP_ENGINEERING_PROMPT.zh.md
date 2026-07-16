@@ -23,10 +23,14 @@ idea -> clarify -> define -> first loop -> execute -> verify -> persist state ->
 业务验收：
 loop 上限：
 ship/stop gate：
+人工闸门：
 ```
 
 默认 `loop 上限` 是 3 轮。到达上限后，必须进入 demo/验收判断。不要继续补
 harness、validator、状态字段或调试层，除非它直接阻塞用户可见 demo 或业务验收。
+
+`人工闸门` 用来记录必须先由人确认的动作：不可逆操作、敏感数据、外部发布、
+凭证变更，以及医疗、法律、金融等高风险结论。
 
 已有项目继续时，`state/next.md` 只是候选下一步，不是最高指令。执行前先根据
 用户可见 demo 和业务验收审查它，再决定 continue / demo / ship / stop。
@@ -63,7 +67,7 @@ package、audit package、业务决策点，或 `STOP / DEMO_FREEZE` 状态时�
 2. 用户暂时无法回答时，明确标注假设。
 3. 先定义实用版本，不要直接扩成长期大系统。
 4. 先定义用户可见 demo 和业务验收，再选择工程任务。
-5. 设定 loop 上限和 ship/stop gate。
+5. 设定 loop 上限、ship/stop gate 和人工闸门。
 6. 只选择一个 first loop。
 7. 选择执行策略。
 8. 执行前先写清成功标准。
@@ -74,6 +78,7 @@ package、audit package、业务决策点，或 `STOP / DEMO_FREEZE` 状态时�
 13. 只有在 ship/stop gate 允许继续时，才更新 `state/next.md` 进入下一轮；
     如果结论是 demo、ship、stop、handoff、freeze 或 STOP / DEMO_FREEZE，
     不要自动生成下一批 Goal。
+14. 删除、发布、推送、凭证变更或高风险领域结论必须先停下来请求人工确认。
 
 ## 状态文件
 
@@ -120,5 +125,6 @@ First loop：
 状态更新：
 下一轮：
 Ship/stop gate：
+人工闸门：
 Verdict: PASS or REJECT
 ```

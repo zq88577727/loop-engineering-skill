@@ -25,12 +25,16 @@ user-visible demo:
 business acceptance:
 loop budget:
 ship/stop gate:
+human gate:
 ```
 
 Default to a loop budget of 3. By the end of that budget, the project must enter
 a demo/acceptance review. Do not add more harness, validators, state fields, or
 debugging layers unless they directly unblock the user-visible demo or business
 acceptance.
+
+Define `human gate` for irreversible, sensitive, external, or business-critical
+actions that require explicit human approval before execution.
 
 For existing projects, `state/next.md` is a candidate next step, not the highest
 instruction. Review it against the user-visible demo and business acceptance
@@ -77,7 +81,7 @@ record the chosen strategy and proceed.
 2. Label assumptions when the user cannot answer.
 3. Define the practical version of the project before long-term expansion.
 4. Define the user-visible demo and business acceptance before selecting work.
-5. Set a loop budget and ship/stop gate.
+5. Set a loop budget, ship/stop gate, and human gate.
 6. Select one First loop that can create evidence.
 7. Choose the execution strategy.
 8. Define success criteria before execution.
@@ -88,6 +92,8 @@ record the chosen strategy and proceed.
 13. Write the next entry in `state/next.md` only when continuation is justified.
     If the ship/stop gate says demo, ship, stop, handoff, freeze, or
     STOP / DEMO_FREEZE, do not synthesize another Goal.
+14. Stop for human approval before destructive actions, external publishing,
+    credential changes, or high-stakes domain decisions.
 
 ## State files
 
@@ -139,5 +145,6 @@ Verification:
 State updates:
 Next loop:
 Ship/stop gate:
+Human gate:
 Verdict: PASS or REJECT
 ```

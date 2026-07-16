@@ -8,7 +8,7 @@ long-running tasks, and existing projects with `state/next.md`.
 1. Read `README.md`, `docs/acceptance.md`, `docs/architecture.md`, and `state/`.
 2. If the request is vague, clarify before implementing.
 3. Define the Project Outcome Mode: user-visible demo, business acceptance,
-   loop budget, and ship/stop gate.
+   loop budget, ship/stop gate, and human gate.
 4. Choose one bounded loop that moves toward the demo.
 5. Choose the execution strategy before executing the loop.
 6. Execute only that loop.
@@ -41,6 +41,8 @@ For product, tool, demo, research-harness, or user-facing workflow work:
 - Define business acceptance in user-result terms.
 - Set a loop budget, default 3 loops.
 - Enforce a ship/stop gate when the budget is exhausted.
+- Define a human gate for irreversible, sensitive, external, or
+  business-critical actions.
 - Do not add more harness unless it directly unblocks the demo.
 
 ## Execution Strategy
@@ -75,6 +77,8 @@ Next loop:
 - Do not use chat memory as durable state.
 - Do not mark PASS without concrete evidence.
 - Do not treat internal test success as business acceptance.
+- Do not run destructive actions, external publishing, credential changes, or
+  high-stakes domain decisions without human approval.
 - Do not execute state/next.md when it does not advance the user-visible demo
   and business acceptance.
 - Do not synthesize another Goal after STOP / DEMO_FREEZE.

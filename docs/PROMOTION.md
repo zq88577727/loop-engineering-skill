@@ -14,7 +14,7 @@ Workflow pack for turning vague ideas into bounded, verified AI coding loops wit
 Website:
 
 ```text
-https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.4.1
+https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.4.2
 ```
 
 ## Suggested topics
@@ -37,7 +37,7 @@ ai-coding
 Short English version:
 
 ```text
-I released Loop Engineering v0.4.1, a workflow pack for turning vague ideas into
+I released Loop Engineering v0.4.2, a workflow pack for turning vague ideas into
 bounded, verified AI coding loops.
 
 Codex users can install it as a skill. Cursor, Claude Code, Gemini CLI, ChatGPT,
@@ -46,7 +46,7 @@ JetBrains AI, and other AI coding tools can use the Portable Prompt Pack.
 Codex install:
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo zq88577727/loop-engineering-skill \
-  --ref v0.4.1 \
+  --ref v0.4.2 \
   --path skills/loop-engineering
 
 Portable path:
@@ -56,7 +56,7 @@ copy portable/LOOP_ENGINEERING_PROMPT.md and portable/STATE_TEMPLATE/ into your 
 Short Chinese version:
 
 ```text
-我发布了 Loop Engineering v0.4.1。它现在不只是 Codex skill，而是一个可复用的
+我发布了 Loop Engineering v0.4.2。它现在不只是 Codex skill，而是一个可复用的
 AI 编程 workflow pack：把模糊想法、长期任务、已有项目继续推进，收束成一个
 可验收 loop，并把决策、失败、下一步写入 state 文件。
 
@@ -69,7 +69,7 @@ AI 用户可以直接复制 Portable Prompt Pack 使用。
 Codex path:
 
 ```text
-1. Install the skill from the pinned v0.4.1 tag.
+1. Install the skill from the pinned v0.4.2 tag.
 2. Restart Codex.
 3. Open a new empty project.
 4. Prompt: "Use Loop Engineering for this vague idea: I want a small browser

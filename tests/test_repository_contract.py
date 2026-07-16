@@ -172,6 +172,7 @@ class RepositoryContractTests(unittest.TestCase):
             "loop budget",
             "business acceptance",
             "ship/stop",
+            "human gate",
         ]:
             self.assertIn(phrase, agents)
 
@@ -240,7 +241,7 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertIn("python3 -m unittest discover -s tests", text)
 
     def test_release_and_forward_test_artifacts_exist(self) -> None:
-        release_notes = ROOT / "docs/releases/v0.4.1.md"
+        release_notes = ROOT / "docs/releases/v0.4.2.md"
         clarify_forward_test = ROOT / "examples/forward-test-report.md"
         existing_forward_test = ROOT / "examples/forward-test-existing-project.md"
         premature_forward_test = ROOT / "examples/forward-test-premature-implementation.md"
@@ -254,16 +255,17 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertTrue(premature_forward_test.is_file())
         self.assertTrue(stale_state_forward_test.is_file())
         self.assertTrue(release_script.is_file())
-        self.assertIn("--ref v0.4.1", readme)
-        self.assertIn("Recommended stable baseline: `v0.4.1`", readme)
+        self.assertIn("--ref v0.4.2", readme)
+        self.assertIn("Recommended stable baseline: `v0.4.2`", readme)
         release_text = release_notes.read_text(encoding="utf-8")
         self.assertIn("Release Page Status", release_text)
         self.assertIn("GitHub Release page", release_text)
         self.assertIn(
-            "https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.4.1",
+            "https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.4.2",
             release_text,
         )
         self.assertIn("Project Outcome Gate", release_text)
+        self.assertIn("human gate", release_text)
         self.assertIn("workflow pack", release_text)
         self.assertIn("Published:", release_text)
         self.assertIn("PASS", clarify_forward_test.read_text(encoding="utf-8"))
@@ -287,7 +289,7 @@ class PublicReadyAssetTests(unittest.TestCase):
                 PYTHON,
                 "scripts/create_github_release.py",
                 "--tag",
-                "v0.4.1",
+                "v0.4.2",
                 "--dry-run",
             ],
             cwd=ROOT,
@@ -299,9 +301,9 @@ class PublicReadyAssetTests(unittest.TestCase):
         payload = json.loads(result.stdout)
 
         self.assertEqual(payload["status"], "dry-run")
-        self.assertEqual(payload["tag"], "v0.4.1")
-        self.assertEqual(payload["notes_file"], "docs/releases/v0.4.1.md")
-        self.assertIn("gh release create v0.4.1", payload["command"])
+        self.assertEqual(payload["tag"], "v0.4.2")
+        self.assertEqual(payload["notes_file"], "docs/releases/v0.4.2.md")
+        self.assertIn("gh release create v0.4.2", payload["command"])
 
     def test_release_script_defaults_to_current_stable_release(self) -> None:
         result = subprocess.run(
@@ -314,12 +316,12 @@ class PublicReadyAssetTests(unittest.TestCase):
 
         payload = json.loads(result.stdout)
 
-        self.assertEqual(payload["tag"], "v0.4.1")
+        self.assertEqual(payload["tag"], "v0.4.2")
         self.assertEqual(
             payload["title"],
-            "v0.4.1 outcome-gated continuation guidance",
+            "v0.4.2 explicit human gate",
         )
-        self.assertEqual(payload["notes_file"], "docs/releases/v0.4.1.md")
+        self.assertEqual(payload["notes_file"], "docs/releases/v0.4.2.md")
 
     def test_automated_behavior_eval_assets_exist(self) -> None:
         required = [
@@ -404,6 +406,7 @@ class PublicReadyAssetTests(unittest.TestCase):
             "CONTRIBUTING.md",
             "Use this when",
             "Do not use this when",
+            "Human Gate",
         ]:
             self.assertIn(phrase, readme)
 
@@ -521,6 +524,7 @@ class PublicReadyAssetTests(unittest.TestCase):
                 "loop budget",
                 "business acceptance",
                 "ship/stop gate",
+                "human gate",
                 "Do not add more harness",
             ]:
                 self.assertIn(phrase, text)
@@ -530,6 +534,7 @@ class PublicReadyAssetTests(unittest.TestCase):
             "用户可见 demo",
             "loop 上限",
             "业务验收",
+            "人工闸门",
             "停止继续补 harness",
         ]:
             self.assertIn(phrase, portable_prompt_zh)

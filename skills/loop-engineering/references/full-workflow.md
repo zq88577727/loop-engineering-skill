@@ -154,6 +154,8 @@ Before implementation, define:
 ## Loop budget
 
 ## Ship/stop gate
+
+## Human gate
 ```
 
 Default rule:
@@ -165,6 +167,8 @@ Default rule:
 - `loop budget`: at most 3 loops before demo/acceptance review.
 - `ship/stop gate`: when the budget is exhausted, stop adding harness and
   either demo, ship, or REJECT with the missing evidence.
+- `human gate`: irreversible, sensitive, external, or business-critical actions
+  that require explicit human approval before execution.
 
 Do not add more harness, validators, state fields, debugging layers, or
 infrastructure unless they directly unblock the user-visible demo or business

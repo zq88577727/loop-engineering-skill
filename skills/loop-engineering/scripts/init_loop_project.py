@@ -40,6 +40,7 @@ as the full project manual.
 - Define business acceptance in user-result terms.
 - Set a loop budget, default 3 loops.
 - At the ship/stop gate, demo, ship, or REJECT instead of creating endless next work.
+- Define a human gate for irreversible, sensitive, external, or business-critical actions.
 
 ## Stop / Demo-Freeze Gate
 
@@ -70,6 +71,7 @@ Only resume engineering when the user explicitly asks for further implementation
 - Execute one bounded loop only.
 - Verify independently before reporting PASS.
 - Verify against business acceptance, not only internal tests.
+- Stop for human approval before destructive actions, external publishing, credential changes, or high-stakes domain decisions.
 - Update state files before stopping.
 - Do not expand scope without recording the decision.
 - Do not add more harness unless it directly unblocks the demo.

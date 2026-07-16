@@ -39,6 +39,7 @@ user-visible demo:
 business acceptance:
 loop budget:
 ship/stop gate:
+human gate:
 ```
 
 Defaults when the user does not specify otherwise:
@@ -49,6 +50,8 @@ Defaults when the user does not specify otherwise:
 - `loop budget`: at most 3 loops before demo/acceptance review.
 - `ship/stop gate`: after the budget, stop adding harness and either demo,
   ship, or REJECT with concrete gaps.
+- `human gate`: irreversible, sensitive, external, or business-critical actions
+  that require explicit human approval before execution.
 
 Do not add more harness, validators, state fields, or debugging layers unless
 they directly unblock the user-visible demo or business acceptance. If a loop
@@ -117,6 +120,7 @@ acceptance criteria:
 verification method:
 state files to read or write:
 ship/stop gate:
+human gate:
 ```
 
 If the request is vague, ask only the questions that reduce real uncertainty. If
@@ -137,6 +141,9 @@ the user does not answer, proceed with labeled conservative assumptions.
    and the next-loop entry only when continuation is justified.
 10. **Converge.** Track the remaining loop budget and force a demo/ship/stop
    decision instead of endlessly generating `state/next.md`.
+11. **Preserve human gates.** Do not auto-run destructive actions, external
+   publishing, credential changes, or high-stakes domain decisions without
+   explicit human approval.
 
 For the complete 17-step method, read `references/full-workflow.md`.
 
