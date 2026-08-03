@@ -1,14 +1,15 @@
 # Offline Behavior Eval Report
 
-- Generated: 2026-07-16T14:27:38.919265+00:00
+- Generated: 2026-08-03T10:59:02.455519+00:00
 - Verdict: PASS
-- Scenario count: 4
+- Scenario count: 5
 
 | scenario | status | errors |
 |---|---|---|
 | existing-project-continue | PASS |  |
 | harness-drift-after-demo-freeze | PASS |  |
 | premature-implementation | PASS |  |
+| simple-demo-convergence | PASS |  |
 | vague-idea | PASS |  |
 
 ## Scope

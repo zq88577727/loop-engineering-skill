@@ -76,3 +76,6 @@ time.
   and converted into a first-loop state plan.
 - `harness-drift-after-demo-freeze.yaml`: STOP / DEMO_FREEZE should stop instead
   of generating another Goal or adding summary/gate/policy/template layers.
+- `simple-demo-convergence.yaml`: a small reversible demo should use conservative
+  assumptions after at most one clarification turn, keep the architecture
+  minimal, and read back persisted state before reporting STOP.

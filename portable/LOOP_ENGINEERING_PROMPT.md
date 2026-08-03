@@ -36,6 +36,12 @@ acceptance.
 Define `human gate` for irreversible, sensitive, external, or business-critical
 actions that require explicit human approval before execution.
 
+Use at most one clarification turn for low-risk, reversible work. If a
+recommended default exists, label conservative assumptions and proceed. Choose
+the lowest-complexity delivery form that satisfies acceptance; do not add a
+server, build system, database, model, or new framework when a static file or
+the existing runtime is sufficient.
+
 For existing projects, `state/next.md` is a candidate next step, not the highest
 instruction. Review it against the user-visible demo and business acceptance
 before execution, then decide continue / demo / ship / stop.
@@ -94,6 +100,9 @@ record the chosen strategy and proceed.
     STOP / DEMO_FREEZE, do not synthesize another Goal.
 14. Stop for human approval before destructive actions, external publishing,
     credential changes, or high-stakes domain decisions.
+15. Perform Final State Readback before the final response: re-read README,
+    `state/triage.md`, and `state/next.md`. PASS, STOP, DEMO_FREEZE, and the
+    reported next action must match the files on disk.
 
 ## State files
 
@@ -126,6 +135,9 @@ content clearly.
 - Do not continue summary/gate/policy/template layers after STOP /
   DEMO_FREEZE unless the user explicitly asks for further implementation and
   gives a new acceptance target.
+- Do not repeat clarification when a conservative recommended default exists.
+- Do not choose architecture more complex than the user-visible demo requires.
+- Do not report a final state that has not been persisted and read back.
 
 ## Output shape
 

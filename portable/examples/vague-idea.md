@@ -13,7 +13,9 @@ implement immediately.
 The assistant should:
 
 - Clarify the goal and assumptions.
+- Use at most one clarification turn, then proceed with conservative defaults.
 - Define one first loop.
+- Choose the lowest-complexity delivery form that can prove the demo.
 - Create or propose state files.
 - Define acceptance criteria.
 - Stop before coding the extension.
@@ -34,3 +36,4 @@ docs/acceptance.md
 - One bounded first loop.
 - State is written or proposed.
 - Verification criteria exist.
+- Final State Readback confirms the reported status matches persisted state.

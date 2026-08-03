@@ -1,4 +1,4 @@
 interface:
   display_name: "Loop Engineering"
   short_description: "Turn vague ideas into verified project loops."
-  default_prompt: "Use Loop Engineering to clarify this idea, define a first loop, execute one bounded iteration, verify it, and update state files."
+  default_prompt: "Use Loop Engineering to clarify this idea with at most one low-risk clarification turn, choose the lowest-complexity acceptable demo, execute one bounded iteration, verify it, update state files, and read back final state before reporting."

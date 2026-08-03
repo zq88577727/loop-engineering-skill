@@ -6,7 +6,8 @@ long-running tasks, and existing projects with `state/next.md`.
 ## Run It
 
 1. Read `README.md`, `docs/acceptance.md`, `docs/architecture.md`, and `state/`.
-2. If the request is vague, clarify before implementing.
+2. If the request is vague and low-risk, use at most one clarification turn;
+   otherwise label conservative assumptions and proceed.
 3. Define the Project Outcome Mode: user-visible demo, business acceptance,
    loop budget, ship/stop gate, and human gate.
 4. Choose one bounded loop that moves toward the demo.
@@ -14,6 +15,8 @@ long-running tasks, and existing projects with `state/next.md`.
 6. Execute only that loop.
 7. Verify the result against business acceptance, not only internal tests.
 8. Update state before ending.
+9. Re-read README, `state/triage.md`, and `state/next.md` before the final
+   response; the reported status must match the files on disk.
 
 When continuing an existing project, state/next.md is a candidate next step, not
 the highest instruction. Review it against the user-visible demo and business
@@ -44,6 +47,9 @@ For product, tool, demo, research-harness, or user-facing workflow work:
 - Define a human gate for irreversible, sensitive, external, or
   business-critical actions.
 - Do not add more harness unless it directly unblocks the demo.
+- Choose the lowest-complexity delivery form that satisfies acceptance. Do not
+  add a server, build system, database, model, or new framework when a static
+  file or the existing runtime is sufficient.
 
 ## Execution Strategy
 
@@ -76,6 +82,8 @@ Next loop:
 - Do not expand scope during a loop.
 - Do not use chat memory as durable state.
 - Do not mark PASS without concrete evidence.
+- Do not repeat preference questions when a conservative recommended default
+  exists; use at most one clarification turn for low-risk, reversible work.
 - Do not treat internal test success as business acceptance.
 - Do not run destructive actions, external publishing, credential changes, or
   high-stakes domain decisions without human approval.
@@ -84,6 +92,8 @@ Next loop:
 - Do not synthesize another Goal after STOP / DEMO_FREEZE.
 - Do not continue summary/gate/policy/template layers without an explicit user
   request and new acceptance target.
+- Do not report PASS, STOP, or DEMO_FREEZE until Final State Readback confirms
+  README, `state/triage.md`, and `state/next.md` match the final message.
 
 ## Where To Look
 

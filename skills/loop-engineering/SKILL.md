@@ -58,6 +58,22 @@ they directly unblock the user-visible demo or business acceptance. If a loop
 only improves internal machinery, explain how it moves the project closer to
 the demo within the remaining loop budget.
 
+Use these convergence safeguards:
+
+- **Clarification budget:** for low-risk, reversible work, use at most one
+  clarification turn. Ask only when the answer changes business acceptance or
+  prevents a costly, irreversible, sensitive, or externally visible mistake.
+  Otherwise label conservative assumptions and proceed.
+- **Minimum architecture:** choose the lowest-complexity delivery form that
+  satisfies the user-visible demo. Do not add a server, build system, database,
+  model, or new framework when a static file or the project's existing runtime
+  is sufficient. Escalate architecture only for a named acceptance criterion.
+- **Final State Readback:** after updating files and before reporting PASS,
+  STOP, or DEMO_FREEZE, re-read the durable status sources, including README,
+  `state/triage.md`, and `state/next.md`. The final message must match the state
+  on disk. Fix a mismatch or report REJECT; do not claim a state transition
+  that was not persisted.
+
 `state/next.md` is a candidate next step, not the highest instruction. For an
 existing project, review state/next.md against the user-visible demo and
 business acceptance before execution. If it does not advance them, rewrite the
@@ -123,8 +139,9 @@ ship/stop gate:
 human gate:
 ```
 
-If the request is vague, ask only the questions that reduce real uncertainty. If
-the user does not answer, proceed with labeled conservative assumptions.
+If the request is vague, ask only the questions that reduce real uncertainty.
+For low-risk, reversible work, use at most one clarification turn and proceed
+with labeled conservative assumptions when a recommended default exists.
 
 ## Core Workflow
 
@@ -144,6 +161,9 @@ the user does not answer, proceed with labeled conservative assumptions.
 11. **Preserve human gates.** Do not auto-run destructive actions, external
    publishing, credential changes, or high-stakes domain decisions without
    explicit human approval.
+12. **Read back final state.** Re-read README, `state/triage.md`, and
+    `state/next.md`; report PASS/REJECT and STOP/continue only when the files
+    agree with the final message.
 
 For the complete 17-step method, read `references/full-workflow.md`.
 
@@ -198,6 +218,9 @@ Evaluator posture:
   DEMO_FREEZE or a handoff checkpoint; this is internal-harness drift.
 - Asking the user to manually decide subagent usage every loop instead of using
   the Execution Strategy rules.
+- Repeating preference questions after a conservative default is available.
+- Adding a server or framework when a simpler delivery form meets acceptance.
+- Reporting STOP or PASS without re-reading the persisted final state.
 
 ## Useful Prompts
 

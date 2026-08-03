@@ -41,6 +41,8 @@ as the full project manual.
 - Set a loop budget, default 3 loops.
 - At the ship/stop gate, demo, ship, or REJECT instead of creating endless next work.
 - Define a human gate for irreversible, sensitive, external, or business-critical actions.
+- For low-risk, reversible work, use at most one clarification turn; then label conservative assumptions and proceed.
+- Choose the lowest-complexity delivery form that satisfies acceptance. Do not add a server, build system, database, model, or new framework when a static file or the existing runtime is sufficient.
 
 ## Stop / Demo-Freeze Gate
 
@@ -73,6 +75,7 @@ Only resume engineering when the user explicitly asks for further implementation
 - Verify against business acceptance, not only internal tests.
 - Stop for human approval before destructive actions, external publishing, credential changes, or high-stakes domain decisions.
 - Update state files before stopping.
+- Before the final response, perform Final State Readback: re-read README, state/triage.md, and state/next.md, and ensure PASS, STOP, DEMO_FREEZE, and the reported next action match the files on disk.
 - Do not expand scope without recording the decision.
 - Do not add more harness unless it directly unblocks the demo.
 - Do not synthesize another Goal after STOP / DEMO_FREEZE.
@@ -148,6 +151,9 @@ Ready For Next Loop: no
 
 Engineering may resume only with explicit user request and new acceptance target.
 Only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
+
+Before reporting this final state, perform Final State Readback: re-read README,
+state/triage.md, and state/next.md and confirm they match the final response.
 
 do not synthesize another Goal after STOP / DEMO_FREEZE.
 Do not continue summary/gate/policy/template, schema, validator, or debug-layer

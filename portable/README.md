@@ -56,12 +56,17 @@ acceptance.
 The assistant followed the workflow only if it:
 
 - Clarified the idea or labeled assumptions before execution.
+- Used at most one clarification turn for low-risk, reversible work, then
+  proceeded with conservative assumptions.
 - Defined one bounded loop with success criteria.
+- Chose the lowest-complexity delivery form that satisfies acceptance.
 - Used or created `state/triage.md`, `state/decisions.md`, `state/inbox.md`,
   `state/failures.md`, and `state/next.md`.
 - Treated `state/next.md` as a candidate next step, not the highest instruction.
 - Verified the result with PASS or REJECT evidence.
-- Updated `state/next.md` for the next session.
+- Updated `state/next.md` only when continuation was justified.
+- Performed Final State Readback so README, `state/triage.md`,
+  `state/next.md`, and the final response agree.
 
 ## Limits
 

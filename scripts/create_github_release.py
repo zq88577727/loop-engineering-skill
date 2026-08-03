@@ -11,8 +11,8 @@ from pathlib import Path
 
 
 DEFAULT_REPO = "zq88577727/loop-engineering-skill"
-DEFAULT_TAG = "v0.4.2"
-DEFAULT_TITLE = "v0.4.2 explicit human gate"
+DEFAULT_TAG = "v0.4.3"
+DEFAULT_TITLE = "v0.4.3 convergence safeguards"
 
 
 def build_command(repo: str, tag: str, title: str, notes_file: str) -> list[str]:

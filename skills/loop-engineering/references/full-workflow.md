@@ -174,6 +174,20 @@ Do not add more harness, validators, state fields, debugging layers, or
 infrastructure unless they directly unblock the user-visible demo or business
 acceptance within the remaining loop budget.
 
+Convergence safeguards:
+
+- `clarification budget`: for low-risk, reversible work, ask at most one
+  clarification turn. If a recommended default exists, proceed with
+  conservative assumptions. Ask again only when the answer changes acceptance or
+  prevents a costly, irreversible, sensitive, or externally visible mistake.
+- `minimum architecture`: choose the lowest-complexity delivery form that meets
+  acceptance. A static file or existing runtime wins over a server, build
+  system, database, model, or new framework unless a named acceptance criterion
+  requires the added component.
+- `Final State Readback`: after state updates and verification, re-read README,
+  `state/triage.md`, and `state/next.md` before the final response. PASS, STOP,
+  DEMO_FREEZE, and the claimed next action must match the files on disk.
+
 ## 6A.1 Stop / Demo-Freeze Gate
 
 Stop is a valid final state. Demo-Freeze is a valid final state. A user-visible
@@ -417,7 +431,9 @@ Use Loop Engineering:
 1. Do not implement yet.
 2. Split the idea into goals, users, scenarios, inputs, outputs, and risks.
 3. Ask necessary clarification questions.
-4. If I cannot answer, create labeled default assumptions.
+4. Use at most one clarification turn for low-risk, reversible work. If I
+   cannot answer or a recommended default exists, create labeled conservative
+   assumptions and proceed.
 5. Offer MVP, practical version, and long-term system.
 6. Recommend a first loop.
 7. Generate project definition, acceptance criteria, non-goals, and first task.
@@ -441,8 +457,9 @@ Then:
 5. Verify independently.
 6. Give PASS or REJECT.
 7. Update state files.
-8. Decide continue / demo / ship / stop.
-9. If the decision is STOP / DEMO_FREEZE, do not create another Goal.
+8. Re-read README, state/triage.md, and state/next.md after updating them.
+9. Decide continue / demo / ship / stop only when the persisted state matches.
+10. If the decision is STOP / DEMO_FREEZE, do not create another Goal.
 ```
 
 ## 15. Loop Quality Gate
@@ -465,6 +482,9 @@ Invalid signals:
 - no next-loop entry when continuation is justified
 - another Goal after STOP / DEMO_FREEZE without explicit user continuation
 - uncontrolled scope expansion
+- repeated clarification after a recommended conservative default exists
+- architecture that is more complex than the user-visible demo requires
+- final PASS/STOP claims that disagree with README or state files
 - summary/gate/policy/template work that only increases internal-harness drift
 - unrecorded failures
 - generator self-approval
@@ -477,8 +497,9 @@ Invalid signals:
 3. Pass Project Outcome Gate.
 4. Verify independently.
 5. Persist the result.
-6. Decide continue / demo / ship / stop.
-7. If STOP / DEMO_FREEZE, stop instead of generating another Goal.
+6. Re-read the persisted final state.
+7. Decide continue / demo / ship / stop.
+8. If STOP / DEMO_FREEZE, stop instead of generating another Goal.
 ```
 
 ## 17. Mindset

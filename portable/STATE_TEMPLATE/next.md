@@ -13,6 +13,9 @@ Ready For Next Loop: no
 Engineering may resume only with explicit user request and new acceptance target.
 Only resume engineering when the user explicitly asks for further implementation and provides a new acceptance target.
 
+Before reporting this final state, perform Final State Readback: re-read README,
+state/triage.md, and state/next.md and confirm they match the final response.
+
 Do not synthesize another Goal after STOP / DEMO_FREEZE.
 Do not continue summary/gate/policy/template, schema, validator, or debug-layer
 work unless it directly advances a new user-visible demo or business acceptance.

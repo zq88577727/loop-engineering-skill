@@ -6,7 +6,7 @@
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827)](skills/loop-engineering/SKILL.md)
-[![Verified](https://img.shields.io/badge/v0.4.2-workflow%20pack-16a34a)](#quality-gates)
+[![Verified](https://img.shields.io/badge/v0.4.3-workflow%20pack-16a34a)](#quality-gates)
 [![GitHub stars](https://img.shields.io/github/stars/zq88577727/loop-engineering-skill?style=social)](https://github.com/zq88577727/loop-engineering-skill/stargazers)
 
 Use it as a Codex skill, or copy the Portable Prompt Pack into Cursor, Claude
@@ -90,13 +90,13 @@ Install from GitHub:
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo zq88577727/loop-engineering-skill \
-  --ref v0.4.2 \
+  --ref v0.4.3 \
   --path skills/loop-engineering
 ```
 
 Restart Codex after installation so the skill is discoverable.
 
-Recommended stable baseline: `v0.4.2`. Omit `--ref v0.4.2` only when you
+Recommended stable baseline: `v0.4.3`. Omit `--ref v0.4.3` only when you
 intentionally want the latest `main` branch version.
 
 After restart, verify activation with a natural prompt:
@@ -179,6 +179,15 @@ Rule: STOP / DEMO_FREEZE is a valid final state; do not synthesize another Goal
 after demo-freeze unless the user explicitly asks for further implementation
 and gives a new acceptance target.
 
+Three convergence defaults apply without requiring a special prompt:
+
+- Low-risk, reversible work gets at most one clarification turn; then Codex
+  proceeds with labeled conservative assumptions.
+- Codex chooses the lowest-complexity delivery form that satisfies acceptance.
+- Before reporting PASS, STOP, or DEMO_FREEZE, Codex performs Final State
+  Readback so README, `state/triage.md`, `state/next.md`, and the final response
+  agree.
+
 如果上下文已经乱了，用这句重新对齐：
 
 ```text
@@ -233,6 +242,7 @@ Loop Engineering keeps Codex work inside a visible loop:
 | Verify | Compare result against the acceptance target | PASS or REJECT |
 | Human Gate | Stop before irreversible, sensitive, external, or high-stakes actions | Explicit approval point |
 | Persist State | Save decisions, failures, and next actions | Durable context |
+| Final State Readback | Re-read durable status after updates | Disk state matches the final response |
 | Continue Or Stop | Start the next loop only when justified, or STOP / DEMO_FREEZE | Next iteration or final stop |
 
 ## Stop / Demo-Freeze Gate

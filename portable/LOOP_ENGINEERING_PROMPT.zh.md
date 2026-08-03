@@ -32,6 +32,10 @@ harness、validator、状态字段或调试层，除非它直接阻塞用户可�
 `人工闸门` 用来记录必须先由人确认的动作：不可逆操作、敏感数据、外部发布、
 凭证变更，以及医疗、法律、金融等高风险结论。
 
+对于低风险、可逆任务，最多一轮澄清；有推荐默认值时，标注保守假设并继续。
+选择满足验收的最低复杂度交付形态；静态文件或项目现有运行时已经足够时，不要
+新增服务器、构建系统、数据库、模型或框架。
+
 已有项目继续时，`state/next.md` 只是候选下一步，不是最高指令。执行前先根据
 用户可见 demo 和业务验收审查它，再决定 continue / demo / ship / stop。
 
@@ -79,6 +83,8 @@ package、audit package、业务决策点，或 `STOP / DEMO_FREEZE` 状态时�
     如果结论是 demo、ship、stop、handoff、freeze 或 STOP / DEMO_FREEZE，
     不要自动生成下一批 Goal。
 14. 删除、发布、推送、凭证变更或高风险领域结论必须先停下来请求人工确认。
+15. 最终回复前执行最终状态回读：重新读取 README、`state/triage.md` 和
+    `state/next.md`。PASS、STOP、DEMO_FREEZE 和所称下一步必须与磁盘状态一致。
 
 ## 状态文件
 
@@ -108,6 +114,9 @@ docs/architecture.md
 - 如果 `state/next.md` 不推进用户可见 demo 和业务验收，不要直接执行。
 - STOP / DEMO_FREEZE 后，不要继续新增 summary/gate/policy/template 中间层；
   只有用户明确要求继续工程实现并给出新的验收目标时才恢复。
+- 有保守推荐默认值时，不要反复澄清。
+- 不要选择超过用户可见 demo 所需复杂度的技术架构。
+- 没有写入并回读真实状态时，不要宣称最终 PASS 或 STOP。
 
 ## 输出格式
 

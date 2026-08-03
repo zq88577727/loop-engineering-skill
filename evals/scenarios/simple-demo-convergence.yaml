@@ -1,0 +1,50 @@
+{
+  "id": "simple-demo-convergence",
+  "prompt": "Use Loop Engineering for a tiny, low-risk local demo. Use at most one clarification turn, then proceed with conservative assumptions. Choose the lowest-complexity delivery form; a single index.html is sufficient and no server or framework is needed. After verification, persist STOP / DEMO_FREEZE and perform Final State Readback before reporting completion.",
+  "expected_mode": "Evaluate",
+  "must_create": [
+    "README.md",
+    "index.html",
+    "state/triage.md",
+    "state/decisions.md",
+    "state/inbox.md",
+    "state/next.md",
+    "codex-final-message.txt"
+  ],
+  "must_contain": {
+    "README.md": ["STOP / DEMO_FREEZE", "index.html", "server"],
+    "state/triage.md": ["STOP / DEMO_FREEZE", "Ready For Next Loop", "no"],
+    "state/decisions.md": ["lowest-complexity"],
+    "state/inbox.md": [
+      ["No open questions", "No unresolved judgment", "clarification budget", "None"],
+      ["reversible", "at most one clarification turn", "without a clarification turn", "human gate"]
+    ],
+    "state/next.md": [
+      "STOP / DEMO_FREEZE",
+      ["Default Next Action", "Default next action: stop"],
+      "stop",
+      "Ready For Next Loop",
+      "no"
+    ],
+    "codex-final-message.txt": [
+      ["Final readback", "Final State Readback"],
+      ["Ready For Next Loop", "Default next action", "README"],
+      "STOP / DEMO_FREEZE"
+    ]
+  },
+  "forbidden_files": [
+    "app.py",
+    "server.py",
+    "package.json",
+    "requirements.txt"
+  ],
+  "simulated_state": {
+    "README.md": "# Tiny Local Demo\n\n## Current Status\n\nSTOP / DEMO_FREEZE\n\n## Run\n\nOpen index.html directly. No server or installation is required.\n",
+    "index.html": "<!doctype html><html><head><meta charset=\"utf-8\"><title>Tiny Local Demo</title></head><body><main>Demo ready</main></body></html>\n",
+    "state/triage.md": "# Triage\n\n## Current Goal\n\nSTOP / DEMO_FREEZE after the smallest user-visible demo passed.\n\n## Current Scope\n\nSingle local file only.\n\n## Priority Queue\n\n| id | task | priority | status | next_action |\n|---|---|---|---|---|\n| DEMO | Verify tiny demo | high | done | stop |\n\n## Blockers\n\nNone.\n\n## Ready For Next Loop\n\nno\n",
+    "state/decisions.md": "# Decisions\n\n| date | decision | reason | status |\n|---|---|---|---|\n| 2026-08-03 | Proceed with conservative assumptions | Low-risk reversible work does not require repeated questions | accepted |\n| 2026-08-03 | Use a single-file index.html with no server | Lowest-complexity delivery form satisfies acceptance | accepted |\n",
+    "state/inbox.md": "# Human Inbox\n\nClarification budget: at most one clarification turn for low-risk reversible work. No unresolved human decision remains.\n",
+    "state/next.md": "# Next Loop\n\n## STOP / DEMO_FREEZE\n\nDefault next action: stop\nReady For Next Loop: no\n\n## Final State Readback\n\nRe-read README, state/triage.md, and state/next.md. They match the final response: STOP / DEMO_FREEZE.\n",
+    "codex-final-message.txt": "PASS - STOP / DEMO_FREEZE. Final readback confirms README, triage, and next state match.\n"
+  }
+}

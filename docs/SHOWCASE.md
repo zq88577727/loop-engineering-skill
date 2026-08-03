@@ -17,7 +17,7 @@ the exact requirements yet.
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo zq88577727/loop-engineering-skill \
-  --ref v0.4.2 \
+  --ref v0.4.3 \
   --path skills/loop-engineering
 ```
 

@@ -241,7 +241,7 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertIn("python3 -m unittest discover -s tests", text)
 
     def test_release_and_forward_test_artifacts_exist(self) -> None:
-        release_notes = ROOT / "docs/releases/v0.4.2.md"
+        release_notes = ROOT / "docs/releases/v0.4.3.md"
         clarify_forward_test = ROOT / "examples/forward-test-report.md"
         existing_forward_test = ROOT / "examples/forward-test-existing-project.md"
         premature_forward_test = ROOT / "examples/forward-test-premature-implementation.md"
@@ -255,13 +255,13 @@ class PublicReadyAssetTests(unittest.TestCase):
         self.assertTrue(premature_forward_test.is_file())
         self.assertTrue(stale_state_forward_test.is_file())
         self.assertTrue(release_script.is_file())
-        self.assertIn("--ref v0.4.2", readme)
-        self.assertIn("Recommended stable baseline: `v0.4.2`", readme)
+        self.assertIn("--ref v0.4.3", readme)
+        self.assertIn("Recommended stable baseline: `v0.4.3`", readme)
         release_text = release_notes.read_text(encoding="utf-8")
         self.assertIn("Release Page Status", release_text)
         self.assertIn("GitHub Release page", release_text)
         self.assertIn(
-            "https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.4.2",
+            "https://github.com/zq88577727/loop-engineering-skill/releases/tag/v0.4.3",
             release_text,
         )
         self.assertIn("Project Outcome Gate", release_text)
@@ -289,7 +289,7 @@ class PublicReadyAssetTests(unittest.TestCase):
                 PYTHON,
                 "scripts/create_github_release.py",
                 "--tag",
-                "v0.4.2",
+                "v0.4.3",
                 "--dry-run",
             ],
             cwd=ROOT,
@@ -301,9 +301,9 @@ class PublicReadyAssetTests(unittest.TestCase):
         payload = json.loads(result.stdout)
 
         self.assertEqual(payload["status"], "dry-run")
-        self.assertEqual(payload["tag"], "v0.4.2")
-        self.assertEqual(payload["notes_file"], "docs/releases/v0.4.2.md")
-        self.assertIn("gh release create v0.4.2", payload["command"])
+        self.assertEqual(payload["tag"], "v0.4.3")
+        self.assertEqual(payload["notes_file"], "docs/releases/v0.4.3.md")
+        self.assertIn("gh release create v0.4.3", payload["command"])
 
     def test_release_script_defaults_to_current_stable_release(self) -> None:
         result = subprocess.run(
@@ -316,12 +316,12 @@ class PublicReadyAssetTests(unittest.TestCase):
 
         payload = json.loads(result.stdout)
 
-        self.assertEqual(payload["tag"], "v0.4.2")
+        self.assertEqual(payload["tag"], "v0.4.3")
         self.assertEqual(
             payload["title"],
-            "v0.4.2 explicit human gate",
+            "v0.4.3 convergence safeguards",
         )
-        self.assertEqual(payload["notes_file"], "docs/releases/v0.4.2.md")
+        self.assertEqual(payload["notes_file"], "docs/releases/v0.4.3.md")
 
     def test_automated_behavior_eval_assets_exist(self) -> None:
         required = [
@@ -333,6 +333,7 @@ class PublicReadyAssetTests(unittest.TestCase):
             "evals/scenarios/existing-project-continue.yaml",
             "evals/scenarios/premature-implementation.yaml",
             "evals/scenarios/harness-drift-after-demo-freeze.yaml",
+            "evals/scenarios/simple-demo-convergence.yaml",
             "evals/reports/offline-eval-report.md",
             ".github/workflows/live-eval.yml",
         ]
@@ -356,13 +357,14 @@ class PublicReadyAssetTests(unittest.TestCase):
         payload = json.loads(result.stdout)
 
         self.assertEqual(payload["status"], "PASS")
-        self.assertEqual(payload["scenario_count"], 4)
+        self.assertEqual(payload["scenario_count"], 5)
         self.assertEqual(
             sorted(s["id"] for s in payload["scenarios"]),
             [
                 "existing-project-continue",
                 "harness-drift-after-demo-freeze",
                 "premature-implementation",
+                "simple-demo-convergence",
                 "vague-idea",
             ],
         )
@@ -589,6 +591,39 @@ class PublicReadyAssetTests(unittest.TestCase):
         ]:
             self.assertIn(phrase, text["portable_prompt_zh"])
 
+    def test_convergence_safeguards_are_consistent_across_entry_points(self) -> None:
+        english_paths = [
+            "README.md",
+            "skills/loop-engineering/SKILL.md",
+            "skills/loop-engineering/references/full-workflow.md",
+            "skills/loop-engineering/scripts/init_loop_project.py",
+            "portable/AGENTS_TEMPLATE.md",
+            "portable/LOOP_ENGINEERING_PROMPT.md",
+        ]
+        for path in english_paths:
+            text = (ROOT / path).read_text(encoding="utf-8").lower()
+            for phrase in [
+                "one clarification turn",
+                "conservative assumptions",
+                "lowest-complexity delivery form",
+                "final state readback",
+                "state/triage.md",
+                "state/next.md",
+            ]:
+                self.assertIn(phrase, text, f"{path} missing {phrase!r}")
+
+        portable_zh = (ROOT / "portable/LOOP_ENGINEERING_PROMPT.zh.md").read_text(
+            encoding="utf-8"
+        )
+        for phrase in [
+            "最多一轮澄清",
+            "保守假设",
+            "最低复杂度交付形态",
+            "最终状态回读",
+            "与磁盘状态一致",
+        ]:
+            self.assertIn(phrase, portable_zh)
+
     def test_initializer_templates_default_to_stop_after_demo_freeze(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp)
@@ -618,6 +653,10 @@ class PublicReadyAssetTests(unittest.TestCase):
             "explicitly asks for further implementation",
             "new acceptance target",
             "summary/gate/policy/template",
+            "one clarification turn",
+            "conservative assumptions",
+            "lowest-complexity delivery form",
+            "Final State Readback",
         ]:
             self.assertIn(phrase, agents)
 
@@ -626,6 +665,9 @@ class PublicReadyAssetTests(unittest.TestCase):
             "Default next action: stop",
             "Ready For Next Loop: no",
             "Engineering may resume only with explicit user request and new acceptance target",
+            "Final State Readback",
+            "state/triage.md",
+            "state/next.md",
         ]:
             self.assertIn(phrase, next_state)
 
@@ -725,7 +767,7 @@ class PublicReadyAssetTests(unittest.TestCase):
 
         self.assertEqual(payload["status"], "DRY_RUN")
         self.assertEqual(payload["runner"], "codex exec")
-        self.assertEqual(payload["scenario_count"], 4)
+        self.assertEqual(payload["scenario_count"], 5)
         for scenario in payload["scenarios"]:
             command_list = scenario["command"]
             command = " ".join(command_list)
